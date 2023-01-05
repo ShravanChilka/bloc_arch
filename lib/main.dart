@@ -1,7 +1,11 @@
-import 'dart:math';
-
-import 'package:bloc/bloc.dart';
+import 'package:bloc_arch/exercise.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:developer' as devtools show log;
+
+extension Log on Object {
+  void log() => devtools.log(toString());
+}
 
 void main() {
   runApp(const MyApp());
@@ -10,7 +14,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,77 +21,69 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  late final ColorCubit cubit;
-
-  @override
-  void initState() {
-    super.initState();
-    cubit = ColorCubit();
-  }
-
-  @override
-  void dispose() {
-    cubit.close();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder<Color?>(
-        stream: cubit.stream,
-        builder: (context, snapshot) {
-          final Widget button = Center(
-            child: TextButton(
-                onPressed: () => cubit.pickRandomColor(),
-                child: const Text('Pick Random Color')),
-          );
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-              return button;
-            case ConnectionState.waiting:
-              return button;
-            case ConnectionState.active:
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 300,
-                    height: 300,
-                    color: snapshot.data,
-                    child: Center(
-                      child: Text(snapshot.data.toString()),
-                    ),
-                  ),
-                  button,
-                ],
-              );
-            case ConnectionState.done:
-              return const SizedBox.shrink();
-          }
-        },
+      home: BlocProvider(
+        create: (_) => PersonsBloc(),
+        child: const MyHomePage(),
       ),
     );
   }
 }
 
-Color get randomColor => Color(Random().nextInt(0xffffffff)).withAlpha(0xff);
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({super.key});
 
-class ColorCubit extends Cubit<Color?> {
-  ColorCubit() : super(null);
-
-  void pickRandomColor() => emit(randomColor);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(title: const Text('Bloc State Management')),
+        body: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    context
+                        .read<PersonsBloc>()
+                        .add(const LoadPersonsAction(url: PersonUrl.persons1));
+                  },
+                  child: const Text('Load json #1'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    context
+                        .read<PersonsBloc>()
+                        .add(const LoadPersonsAction(url: PersonUrl.persons2));
+                  },
+                  child: const Text('Load json #2'),
+                ),
+              ],
+            ),
+            BlocBuilder<PersonsBloc, FetchResult?>(
+              buildWhen: (previousResult, currentResult) {
+                return previousResult?.persons != currentResult?.persons;
+              },
+              builder: (context, fetchResult) {
+                fetchResult?.log();
+                final persons = fetchResult?.persons;
+                if (persons == null) {
+                  return const SizedBox.shrink();
+                }
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: persons.length,
+                    itemBuilder: (context, index) {
+                      final person = persons[index]!;
+                      return ListTile(
+                        title: Text(person.name),
+                        subtitle: Text(person.age.toString()),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+          ],
+        ));
+  }
 }
