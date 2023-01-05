@@ -1,6 +1,7 @@
-import 'package:bloc_arch/exercise.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'bloc/bloc_actions.dart';
+import 'bloc/persons_bloc.dart';
 import 'dart:developer' as devtools show log;
 
 extension Log on Object {
@@ -43,17 +44,19 @@ class MyHomePage extends StatelessWidget {
               children: [
                 TextButton(
                   onPressed: () {
-                    context
-                        .read<PersonsBloc>()
-                        .add(const LoadPersonsAction(url: PersonUrl.persons1));
+                    context.read<PersonsBloc>().add(
+                          const LoadPersonsAction(
+                              url: persons1Url, loader: getPersons),
+                        );
                   },
                   child: const Text('Load json #1'),
                 ),
                 TextButton(
                   onPressed: () {
-                    context
-                        .read<PersonsBloc>()
-                        .add(const LoadPersonsAction(url: PersonUrl.persons2));
+                    context.read<PersonsBloc>().add(
+                          const LoadPersonsAction(
+                              url: persons2Url, loader: getPersons),
+                        );
                   },
                   child: const Text('Load json #2'),
                 ),
