@@ -1,7 +1,16 @@
+import 'package:bloc_arch/api/login_api.dart';
+import 'package:bloc_arch/api/notes_api.dart';
+import 'package:bloc_arch/bloc/actions.dart';
+import 'package:bloc_arch/bloc/app_bloc.dart';
+import 'package:bloc_arch/bloc/app_state.dart';
+import 'package:bloc_arch/dialogs/generic_dialog.dart';
+import 'package:bloc_arch/dialogs/loading_screen.dart';
+import 'package:bloc_arch/models.dart';
+import 'package:bloc_arch/strings.dart';
+import 'package:bloc_arch/views/iterable_list_view.dart';
+import 'package:bloc_arch/views/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'bloc/bloc_actions.dart';
-import 'bloc/persons_bloc.dart';
 import 'dart:developer' as devtools show log;
 
 extension Log on Object {
@@ -22,10 +31,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: BlocProvider(
-        create: (_) => PersonsBloc(),
-        child: const MyHomePage(),
-      ),
+      home: const MyHomePage(),
     );
   }
 }
@@ -35,58 +41,57 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: const Text('Bloc State Management')),
-        body: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    context.read<PersonsBloc>().add(
-                          const LoadPersonsAction(
-                              url: persons1Url, loader: getPersons),
-                        );
-                  },
-                  child: const Text('Load json #1'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    context.read<PersonsBloc>().add(
-                          const LoadPersonsAction(
-                              url: persons2Url, loader: getPersons),
-                        );
-                  },
-                  child: const Text('Load json #2'),
-                ),
-              ],
-            ),
-            BlocBuilder<PersonsBloc, FetchResult?>(
-              buildWhen: (previousResult, currentResult) {
-                return previousResult?.persons != currentResult?.persons;
-              },
-              builder: (context, fetchResult) {
-                fetchResult?.log();
-                final persons = fetchResult?.persons;
-                if (persons == null) {
-                  return const SizedBox.shrink();
-                }
-                return Expanded(
-                  child: ListView.builder(
-                    itemCount: persons.length,
-                    itemBuilder: (context, index) {
-                      final person = persons[index]!;
-                      return ListTile(
-                        title: Text(person.name),
-                        subtitle: Text(person.age.toString()),
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
-          ],
-        ));
+    return BlocProvider(
+      create: (BuildContext context) => AppBloc(
+        loginApi: LoginApi(),
+        notesApi: NotesApi(),
+      ),
+      child: Scaffold(
+        appBar: AppBar(title: const Text(homePage)),
+        body: BlocConsumer<AppBloc, AppState>(
+          listener: (context, state) {
+            // loading screen
+            if (state.isLoading) {
+              LoadingScreen.instance().show(
+                context: context,
+                text: pleaseWait,
+              );
+            } else {
+              LoadingScreen.instance().hide();
+            }
+            // display possible errors
+            final loginError = state.loginError;
+            if (loginError != null) {
+              showGenericDialog(
+                context: context,
+                title: loginErrorDialogTitle,
+                content: loginErrorDialogDescription,
+                optionBuilder: () => {'OK': true},
+              );
+            }
+            // if we are logged in, but we have no fetched notes, fetch them now
+            if (state.isLoading == false &&
+                state.loginError == null &&
+                state.loginHandle == const LoginHandle.shravan() &&
+                state.fetchedNotes == null) {
+              context.read<AppBloc>().add(const LoadNotesAction());
+            }
+          },
+          builder: (context, state) {
+            if (state.fetchedNotes == null) {
+              return LoginView(
+                onLoginTapped: (email, password) {
+                  context
+                      .read<AppBloc>()
+                      .add(LoginAction(email: email, password: password));
+                },
+              );
+            } else {
+              return IterableListView(iterable: state.fetchedNotes!);
+            }
+          },
+        ),
+      ),
+    );
   }
 }
