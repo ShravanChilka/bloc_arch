@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "566213404382",
+    "project_id": "bloc-arch",
+    "storage_bucket": "bloc-arch.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:566213404382:android:08cd9a7f50dd1c6b24844f",
+        "android_client_info": {
+          "package_name": "com.example.bloc_arch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "566213404382-42jafp17nghkqmbnq2odruh5nm5jj7fq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeUMz4gHQDhtwF8zLxDzRIdB4d-POMDmA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "566213404382-42jafp17nghkqmbnq2odruh5nm5jj7fq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
