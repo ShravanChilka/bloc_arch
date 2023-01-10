@@ -23,7 +23,7 @@ class AppStateLoggedIn extends AppState {
     required this.images,
     required this.user,
     required super.isLoading,
-    required super.authError,
+    super.authError,
   });
 
   @override
@@ -59,15 +59,7 @@ class AppStateLoggedOut extends AppState {
 class AppStateIsInRegistrationView extends AppState {
   const AppStateIsInRegistrationView({
     required super.isLoading,
-    required super.authError,
-  });
-}
-
-@immutable
-class AppStateIsInLogInView extends AppState {
-  const AppStateIsInLogInView({
-    required super.isLoading,
-    required super.authError,
+    super.authError,
   });
 }
 

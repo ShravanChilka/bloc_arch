@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuthException;
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart' show immutable;
 
 const Map<String, AuthError> authErrorMapping = {
@@ -16,6 +17,10 @@ abstract class AuthError {
   });
 
   factory AuthError.fromFirabaseAuth(FirebaseAuthException exception) =>
+      AuthErrorDetails(
+          dialogTitle: exception.code,
+          dialogContent: exception.message ?? 'Unknown Error');
+  factory AuthError.fromFirabase(FirebaseException exception) =>
       AuthErrorDetails(
           dialogTitle: exception.code,
           dialogContent: exception.message ?? 'Unknown Error');
