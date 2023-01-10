@@ -14,7 +14,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         (event, emit) => emit(const AppStateLoggedOut(isLoading: false)));
 
     //* go to registration screen
-    on<AppEventGoToLogIn>((event, emit) =>
+    on<AppEventGoToRegister>((event, emit) =>
         emit(const AppStateIsInRegistrationView(isLoading: false)));
 
     //* login event

@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -49,6 +43,15 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyAUQRDvmKQQJ7_wVmdpbC2UlCHIK9PTWVw',
+    appId: '1:566213404382:web:b1c900d966243b3424844f',
+    messagingSenderId: '566213404382',
+    projectId: 'bloc-arch',
+    authDomain: 'bloc-arch.firebaseapp.com',
+    storageBucket: 'bloc-arch.appspot.com',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDeUMz4gHQDhtwF8zLxDzRIdB4d-POMDmA',
     appId: '1:566213404382:android:08cd9a7f50dd1c6b24844f',
@@ -58,6 +61,16 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyBKSSBSOx3XPsFNlOwLgFF69RwccOrWoNs',
+    appId: '1:566213404382:ios:84462871cb9b0f2f24844f',
+    messagingSenderId: '566213404382',
+    projectId: 'bloc-arch',
+    storageBucket: 'bloc-arch.appspot.com',
+    iosClientId: '566213404382-tmrfv9k6j8s58efajhc8kukrfm092gis.apps.googleusercontent.com',
+    iosBundleId: 'com.example.blocArch',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyBKSSBSOx3XPsFNlOwLgFF69RwccOrWoNs',
     appId: '1:566213404382:ios:84462871cb9b0f2f24844f',
     messagingSenderId: '566213404382',
