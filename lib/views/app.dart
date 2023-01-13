@@ -1,57 +1,78 @@
-import 'package:bloc_arch/bloc/app_bloc.dart';
-import 'package:bloc_arch/bloc/app_event.dart';
-import 'package:bloc_arch/bloc/app_state.dart';
-import 'package:bloc_arch/dialogs/error_dialog.dart';
-import 'package:bloc_arch/dialogs/loading_screen.dart';
-import 'package:bloc_arch/views/login_view.dart';
-import 'package:bloc_arch/views/photo_gallery_view.dart';
-import 'package:bloc_arch/views/register_view.dart';
+import 'package:bloc_arch/bloc/timer_bloc.dart';
+import 'package:bloc_arch/bloc/timer_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../models/ticker.dart';
+
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AppBloc>(
-      create: (_) => AppBloc()
-        ..add(
-          const AppEventInitialize(),
-        ),
+    return BlocProvider(
+      create: (_) => TimerBloc(ticker: const Ticker()),
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'Counter App',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.blueGrey,
+          useMaterial3: true,
         ),
-        home: BlocConsumer<AppBloc, AppState>(
-          builder: (context, appState) {
-            if (appState is AppStateLoggedOut) {
-              return const LogInView();
-            } else if (appState is AppStateLoggedIn) {
-              return const PhotoGalleryView();
-            } else if (appState is AppStateIsInRegistrationView) {
-              return const RegisterView();
-            } else {
-              // this should not happen
-              return Container();
-            }
-          },
-          listener: (context, appState) {
-            if (appState.isLoading) {
-              LoadingScreen.instance()
-                  .show(context: context, text: 'Loading...');
-            } else {
-              LoadingScreen.instance().hide();
-            }
-            if (appState.authError != null) {
-              showErrorDialog(
-                authError: appState.authError!,
-                context: context,
-              );
-            }
-          },
+        home: const HomePage(),
+      ),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final duration = context.select(
+      (TimerBloc timerBloc) => timerBloc.state.duration,
+    );
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Timer Bloc'),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Center(
+              child: Text(
+                duration.toString(),
+                style: Theme.of(context).textTheme.headline1,
+              ),
+            ),
+            ElevatedButton.icon(
+              onPressed: () => context
+                  .read<TimerBloc>()
+                  .add(TimerEventStarted(duration: duration)),
+              icon: const Icon(Icons.play_arrow),
+              label: const Text('Play'),
+            ),
+            ElevatedButton.icon(
+              onPressed: () =>
+                  context.read<TimerBloc>().add(const TimerEventPaused()),
+              icon: const Icon(Icons.pause),
+              label: const Text('Pause'),
+            ),
+            ElevatedButton.icon(
+              onPressed: () =>
+                  context.read<TimerBloc>().add(const TimerEventResume()),
+              icon: const Icon(Icons.play_arrow),
+              label: const Text('Resume'),
+            ),
+            ElevatedButton.icon(
+              onPressed: () =>
+                  context.read<TimerBloc>().add(const TimerEventReset()),
+              icon: const Icon(Icons.restart_alt),
+              label: const Text('Reset'),
+            ),
+          ],
         ),
       ),
     );
