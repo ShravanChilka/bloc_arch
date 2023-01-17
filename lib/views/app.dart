@@ -1,80 +1,50 @@
-import 'package:bloc_arch/bloc/timer_bloc.dart';
-import 'package:bloc_arch/bloc/timer_event.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:python_shell/python_shell.dart';
 
-import '../models/ticker.dart';
-
-class App extends StatelessWidget {
-  const App({super.key});
+class App extends StatefulWidget {
+  const App({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => TimerBloc(ticker: const Ticker()),
-      child: MaterialApp(
-        title: 'Counter App',
-        theme: ThemeData(
-          primarySwatch: Colors.blueGrey,
-          useMaterial3: true,
-        ),
-        home: const HomePage(),
-      ),
-    );
-  }
+  State<App> createState() => _AppState();
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
+class _AppState extends State<App> {
+  String data = 'NA';
   @override
   Widget build(BuildContext context) {
-    final duration = context.select(
-      (TimerBloc timerBloc) => timerBloc.state.duration,
-    );
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Timer Bloc'),
-        centerTitle: true,
+    return MaterialApp(
+      theme: ThemeData(
+        useMaterial3: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
+      home: Scaffold(
+        body: Column(
           children: [
-            Center(
-              child: Text(
-                duration.toString(),
-                style: Theme.of(context).textTheme.headline1,
-              ),
-            ),
-            ElevatedButton.icon(
-              onPressed: () => context
-                  .read<TimerBloc>()
-                  .add(TimerEventStarted(duration: duration)),
-              icon: const Icon(Icons.play_arrow),
-              label: const Text('Play'),
-            ),
-            ElevatedButton.icon(
-              onPressed: () =>
-                  context.read<TimerBloc>().add(const TimerEventPaused()),
-              icon: const Icon(Icons.pause),
-              label: const Text('Pause'),
-            ),
-            ElevatedButton.icon(
-              onPressed: () =>
-                  context.read<TimerBloc>().add(const TimerEventResume()),
-              icon: const Icon(Icons.play_arrow),
-              label: const Text('Resume'),
-            ),
-            ElevatedButton.icon(
-              onPressed: () =>
-                  context.read<TimerBloc>().add(const TimerEventReset()),
-              icon: const Icon(Icons.restart_alt),
-              label: const Text('Reset'),
-            ),
+            Text(data),
+            ElevatedButton(
+                onPressed: () => runPythonCodeClickEvent(context),
+                child: const Text('Run Python Code')),
           ],
         ),
       ),
     );
+  }
+
+  void runPythonCodeClickEvent(BuildContext context) {
+    final instance = ShellManager.getInstance('default');
+    instance.runFile('assets/test.py',
+        listener: ShellListener(
+          onMessage: (String message) {
+            setState(() => data = message);
+            log(message);
+          },
+          onComplete: () {
+            log('Completed');
+          },
+          onError: (Object object, StackTrace stackTrace) {
+            log(object.toString());
+          },
+        ));
   }
 }
