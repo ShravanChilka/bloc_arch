@@ -22,7 +22,9 @@ dependencies:
   uuid: ^3.0.7
   firebase_auth: ^4.2.5
   json_annotation: ^4.7.0
-  python_shell: ^0.0.7
+  dartz: ^0.10.1
+  connectivity_plus: ^3.0.2
+  equatable: ^2.0.5
 
 dev_dependencies:
   flutter_test:
