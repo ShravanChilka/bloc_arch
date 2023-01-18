@@ -4,12 +4,7 @@ import 'package:bloc_arch/core/errors/failures.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart' show immutable;
 import '../data_sources/games_remote_data_source.dart';
-import '../models/creator.dart';
-import '../models/developer.dart';
-import '../models/game.dart';
-import '../models/genre.dart';
-import '../models/platform.dart';
-import '../models/publisher.dart';
+import '../models/models_export.dart';
 import '../../domain/repository/games_repository.dart';
 
 @immutable
@@ -24,8 +19,11 @@ class GamesRepositoryImpl implements GamesRepository {
   @override
   Future<Either<Failure, List<Creator>>> getAllCreators() async {
     if (await networkInfo.isConnected) {
-      try {} on ServerException catch (e) {
-        return Left(ServerFailure(errorMessage: e.toString()));
+      try {
+        final result = await remoteDataSource.getAllCreators();
+        return Right(result);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(errorMessage: e.exception.toString()));
       }
     } else {
       return Left(NetworkFailure());
@@ -33,51 +31,116 @@ class GamesRepositoryImpl implements GamesRepository {
   }
 
   @override
-  Future<Either<Failure, List<Developer>>> getAllDevelopers() {
-    // TODO: implement getAllDevelopers
-    throw UnimplementedError();
+  Future<Either<Failure, List<Developer>>> getAllDevelopers() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.getAllDevelopers();
+        return Right(result);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(errorMessage: e.exception.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
   }
 
   @override
-  Future<Either<Failure, List<GameDetails>>> getAllGames(
-      {Map<String, String>? queryParameters}) {
-    // TODO: implement getAllGames
-    throw UnimplementedError();
+  Future<Either<Failure, List<GameDetails>>> getAllGames({
+    Map<String, String>? queryParameters,
+  }) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.getAllGames();
+        return Right(result);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(errorMessage: e.exception.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
   }
 
   @override
-  Future<Either<Failure, List<Genre>>> getAllGenres() {
-    // TODO: implement getAllGenres
-    throw UnimplementedError();
+  Future<Either<Failure, List<Genre>>> getAllGenres() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.getAllGenres();
+        return Right(result);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(errorMessage: e.exception.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
   }
 
   @override
-  Future<Either<Failure, List<Platform>>> getAllParentPlatforms() {
-    // TODO: implement getAllParentPlatforms
-    throw UnimplementedError();
+  Future<Either<Failure, List<Platform>>> getAllParentPlatforms() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.getAllParentPlatforms();
+        return Right(result);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(errorMessage: e.exception.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
   }
 
   @override
-  Future<Either<Failure, List<Platform>>> getAllPlatforms() {
-    // TODO: implement getAllPlatforms
-    throw UnimplementedError();
+  Future<Either<Failure, List<Platform>>> getAllPlatforms() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.getAllParentPlatforms();
+        return Right(result);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(errorMessage: e.exception.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
   }
 
   @override
-  Future<Either<Failure, List<Publisher>>> getAllPublishers() {
-    // TODO: implement getAllPublishers
-    throw UnimplementedError();
+  Future<Either<Failure, List<Publisher>>> getAllPublishers() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.getAllPublishers();
+        return Right(result);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(errorMessage: e.exception.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
   }
 
   @override
-  Future<Either<Failure, List<Publisher>>> getAllStores() {
-    // TODO: implement getAllStores
-    throw UnimplementedError();
+  Future<Either<Failure, List<Store>>> getAllStores() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.getAllStores();
+        return Right(result);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(errorMessage: e.exception.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
   }
 
   @override
-  Future<Either<Failure, List<Publisher>>> getAllTags() {
-    // TODO: implement getAllTags
-    throw UnimplementedError();
+  Future<Either<Failure, List<Tag>>> getAllTags() async {
+    if (await networkInfo.isConnected) {
+      try {
+        final result = await remoteDataSource.getAllTags();
+        return Right(result);
+      } on ServerException catch (e) {
+        return Left(ServerFailure(errorMessage: e.exception.toString()));
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
   }
 }

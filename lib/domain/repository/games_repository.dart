@@ -1,9 +1,12 @@
+import 'package:bloc_arch/data/models/store.dart';
+
 import '../../data/models/developer.dart';
 import '../../data/models/platform.dart';
 import '../../data/models/publisher.dart';
 import '../../data/models/genre.dart';
 import '../../data/models/game.dart';
 import '../../data/models/creator.dart';
+import '../../data/models/tag.dart';
 import '../../core/errors/failures.dart';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:dartz/dartz.dart' show Either;
@@ -21,6 +24,6 @@ abstract class GamesRepository {
   Future<Either<Failure, List<Platform>>> getAllPlatforms();
   Future<Either<Failure, List<Platform>>> getAllParentPlatforms();
   Future<Either<Failure, List<Publisher>>> getAllPublishers();
-  Future<Either<Failure, List<Publisher>>> getAllTags();
-  Future<Either<Failure, List<Publisher>>> getAllStores();
+  Future<Either<Failure, List<Tag>>> getAllTags();
+  Future<Either<Failure, List<Store>>> getAllStores();
 }

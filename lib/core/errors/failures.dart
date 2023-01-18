@@ -1,15 +1,14 @@
 abstract class Failure {
   final String? errorMessage;
-
-  Failure({required this.errorMessage});
+  Failure({this.errorMessage});
 }
 
 class ServerFailure extends Failure {
-  ServerFailure({super.errorMessage});
+  ServerFailure({required super.errorMessage});
 }
 
 class CacheFailure extends Failure {
-  CacheFailure({super.errorMessage});
+  CacheFailure({required super.errorMessage});
 }
 
 class NetworkFailure extends Failure {
