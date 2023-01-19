@@ -9,6 +9,6 @@ class GetAllDevelopers {
 
   GetAllDevelopers(this.repository);
 
-  Future<Either<Failure, List<Developer>>> call(NoParams params) async =>
-      await repository.getAllDevelopers();
+  Future<Either<Failure, List<Developer>>> call(Params params) async =>
+      await repository.getAllDevelopers(params: params);
 }

@@ -9,6 +9,6 @@ class GetAllStores {
 
   GetAllStores(this.repository);
 
-  Future<Either<Failure, List<Store>>> call(NoParams params) async =>
-      await repository.getAllStores();
+  Future<Either<Failure, List<Store>>> call(Params params) async =>
+      await repository.getAllStores(params: params);
 }

@@ -1,6 +1,7 @@
 import 'package:bloc_arch/core/connection/network_info.dart';
 import 'package:bloc_arch/core/errors/exceptions.dart';
 import 'package:bloc_arch/core/errors/failures.dart';
+import 'package:bloc_arch/core/usecases/usecase.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart' show immutable;
 import '../data_sources/games_remote_data_source.dart';
@@ -17,10 +18,11 @@ class GamesRepositoryImpl implements GamesRepository {
   });
 
   @override
-  Future<Either<Failure, List<Creator>>> getAllCreators() async {
+  Future<Either<Failure, List<Creator>>> getAllCreators(
+      {required Params params}) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.getAllCreators();
+        final result = await remoteDataSource.getAllCreators(params: params);
         return Right(result);
       } on ServerException catch (e) {
         return Left(ServerFailure(errorMessage: e.exception.toString()));
@@ -31,10 +33,11 @@ class GamesRepositoryImpl implements GamesRepository {
   }
 
   @override
-  Future<Either<Failure, List<Developer>>> getAllDevelopers() async {
+  Future<Either<Failure, List<Developer>>> getAllDevelopers(
+      {required Params params}) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.getAllDevelopers();
+        final result = await remoteDataSource.getAllDevelopers(params: params);
         return Right(result);
       } on ServerException catch (e) {
         return Left(ServerFailure(errorMessage: e.exception.toString()));
@@ -46,11 +49,11 @@ class GamesRepositoryImpl implements GamesRepository {
 
   @override
   Future<Either<Failure, List<GameDetails>>> getAllGames({
-    Map<String, String>? queryParameters,
+    required Params params,
   }) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.getAllGames();
+        final result = await remoteDataSource.getAllGames(params: params);
         return Right(result);
       } on ServerException catch (e) {
         return Left(ServerFailure(errorMessage: e.exception.toString()));
@@ -61,10 +64,11 @@ class GamesRepositoryImpl implements GamesRepository {
   }
 
   @override
-  Future<Either<Failure, List<Genre>>> getAllGenres() async {
+  Future<Either<Failure, List<Genre>>> getAllGenres(
+      {required Params params}) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.getAllGenres();
+        final result = await remoteDataSource.getAllGenres(params: params);
         return Right(result);
       } on ServerException catch (e) {
         return Left(ServerFailure(errorMessage: e.exception.toString()));
@@ -75,10 +79,12 @@ class GamesRepositoryImpl implements GamesRepository {
   }
 
   @override
-  Future<Either<Failure, List<Platform>>> getAllParentPlatforms() async {
+  Future<Either<Failure, List<Platform>>> getAllParentPlatforms(
+      {required Params params}) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.getAllParentPlatforms();
+        final result =
+            await remoteDataSource.getAllParentPlatforms(params: params);
         return Right(result);
       } on ServerException catch (e) {
         return Left(ServerFailure(errorMessage: e.exception.toString()));
@@ -89,10 +95,12 @@ class GamesRepositoryImpl implements GamesRepository {
   }
 
   @override
-  Future<Either<Failure, List<Platform>>> getAllPlatforms() async {
+  Future<Either<Failure, List<Platform>>> getAllPlatforms(
+      {required Params params}) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.getAllParentPlatforms();
+        final result =
+            await remoteDataSource.getAllParentPlatforms(params: params);
         return Right(result);
       } on ServerException catch (e) {
         return Left(ServerFailure(errorMessage: e.exception.toString()));
@@ -103,10 +111,11 @@ class GamesRepositoryImpl implements GamesRepository {
   }
 
   @override
-  Future<Either<Failure, List<Publisher>>> getAllPublishers() async {
+  Future<Either<Failure, List<Publisher>>> getAllPublishers(
+      {required Params params}) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.getAllPublishers();
+        final result = await remoteDataSource.getAllPublishers(params: params);
         return Right(result);
       } on ServerException catch (e) {
         return Left(ServerFailure(errorMessage: e.exception.toString()));
@@ -117,10 +126,11 @@ class GamesRepositoryImpl implements GamesRepository {
   }
 
   @override
-  Future<Either<Failure, List<Store>>> getAllStores() async {
+  Future<Either<Failure, List<Store>>> getAllStores(
+      {required Params params}) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.getAllStores();
+        final result = await remoteDataSource.getAllStores(params: params);
         return Right(result);
       } on ServerException catch (e) {
         return Left(ServerFailure(errorMessage: e.exception.toString()));
@@ -131,10 +141,11 @@ class GamesRepositoryImpl implements GamesRepository {
   }
 
   @override
-  Future<Either<Failure, List<Tag>>> getAllTags() async {
+  Future<Either<Failure, List<Tag>>> getAllTags(
+      {required Params params}) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.getAllTags();
+        final result = await remoteDataSource.getAllTags(params: params);
         return Right(result);
       } on ServerException catch (e) {
         return Left(ServerFailure(errorMessage: e.exception.toString()));

@@ -9,6 +9,6 @@ class GetAllCreators {
 
   GetAllCreators(this.repository);
 
-  Future<Either<Failure, List<Creator>>> call(NoParams params) async =>
-      await repository.getAllCreators();
+  Future<Either<Failure, List<Creator>>> call(Params params) async =>
+      await repository.getAllCreators(params: params);
 }

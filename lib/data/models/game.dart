@@ -41,24 +41,24 @@ class GameDetails {
   final String slug;
   final String name;
   final int added;
-  final String released;
+  final String? released;
   final bool tba;
-  final String backgroundImage;
+  final String? backgroundImage;
   final double rating;
   final int ratingTop;
   final List<Rating> ratings;
+  final AddedByStatus? addedByStatus;
   final int ratingsCount;
-  final AddedByStatus addedByStatus;
-  final int metacritic;
+  final int? metacritic;
   final int suggestionsCount;
   final int playtime;
   final String updated;
   final List<PlatformResult> platforms;
-  final List<StoreResult> stores;
+  final List<StoreResult>? stores;
   final int reviewsCount;
   final int reviewsTextCount;
   final List<Tag> tags;
-  final EsrbRating esrbRating;
+  final EsrbRating? esrbRating;
   final List<ShortScreenshot>? shortScreenshots;
   final List<PlatformResult> parentPlatforms;
   final List<Genre> genres;
@@ -68,20 +68,20 @@ class GameDetails {
     required this.slug,
     required this.name,
     required this.added,
-    required this.released,
+    this.released,
     required this.tba,
-    required this.backgroundImage,
+    this.backgroundImage,
     required this.rating,
     required this.ratingTop,
     required this.ratings,
     required this.ratingsCount,
-    required this.addedByStatus,
-    required this.metacritic,
+    this.addedByStatus,
+    this.metacritic,
     required this.suggestionsCount,
     required this.playtime,
     required this.updated,
     required this.platforms,
-    required this.stores,
+    this.stores,
     required this.reviewsCount,
     required this.reviewsTextCount,
     required this.tags,

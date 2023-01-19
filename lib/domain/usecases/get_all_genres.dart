@@ -9,6 +9,6 @@ class GetAllGenres {
 
   GetAllGenres(this.repository);
 
-  Future<Either<Failure, List<Genre>>> call(NoParams params) async =>
-      await repository.getAllGenres();
+  Future<Either<Failure, List<Genre>>> call(Params params) async =>
+      await repository.getAllGenres(params: params);
 }

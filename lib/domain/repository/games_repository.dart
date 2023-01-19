@@ -1,3 +1,4 @@
+import 'package:bloc_arch/core/usecases/usecase.dart';
 import 'package:bloc_arch/data/models/store.dart';
 
 import '../../data/models/developer.dart';
@@ -16,14 +17,30 @@ abstract class GamesRepository {
   const GamesRepository();
 
   Future<Either<Failure, List<GameDetails>>> getAllGames({
-    Map<String, String>? queryParameters,
+    required Params params,
   });
-  Future<Either<Failure, List<Genre>>> getAllGenres();
-  Future<Either<Failure, List<Creator>>> getAllCreators();
-  Future<Either<Failure, List<Developer>>> getAllDevelopers();
-  Future<Either<Failure, List<Platform>>> getAllPlatforms();
-  Future<Either<Failure, List<Platform>>> getAllParentPlatforms();
-  Future<Either<Failure, List<Publisher>>> getAllPublishers();
-  Future<Either<Failure, List<Tag>>> getAllTags();
-  Future<Either<Failure, List<Store>>> getAllStores();
+  Future<Either<Failure, List<Genre>>> getAllGenres({
+    required Params params,
+  });
+  Future<Either<Failure, List<Creator>>> getAllCreators({
+    required Params params,
+  });
+  Future<Either<Failure, List<Developer>>> getAllDevelopers({
+    required Params params,
+  });
+  Future<Either<Failure, List<Platform>>> getAllPlatforms({
+    required Params params,
+  });
+  Future<Either<Failure, List<Platform>>> getAllParentPlatforms({
+    required Params params,
+  });
+  Future<Either<Failure, List<Publisher>>> getAllPublishers({
+    required Params params,
+  });
+  Future<Either<Failure, List<Tag>>> getAllTags({
+    required Params params,
+  });
+  Future<Either<Failure, List<Store>>> getAllStores({
+    required Params params,
+  });
 }

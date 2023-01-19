@@ -1,22 +1,22 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:bloc_arch/core/errors/exceptions.dart';
+import 'package:bloc_arch/core/usecases/usecase.dart';
 import 'package:http/http.dart' as http show Client;
 import '../../data/models/models_export.dart';
-import '../../utils/contants.dart';
 
 abstract class GamesRemoteDataSource {
   Future<List<GameDetails>> getAllGames({
-    Map<String, String>? queryParameters,
+    required Params params,
   });
-  Future<List<Genre>> getAllGenres();
-  Future<List<Creator>> getAllCreators();
-  Future<List<Developer>> getAllDevelopers();
-  Future<List<Platform>> getAllPlatforms();
-  Future<List<Platform>> getAllParentPlatforms();
-  Future<List<Publisher>> getAllPublishers();
-  Future<List<Tag>> getAllTags();
-  Future<List<Store>> getAllStores();
+  Future<List<Genre>> getAllGenres({required Params params});
+  Future<List<Creator>> getAllCreators({required Params params});
+  Future<List<Developer>> getAllDevelopers({required Params params});
+  Future<List<Platform>> getAllPlatforms({required Params params});
+  Future<List<Platform>> getAllParentPlatforms({required Params params});
+  Future<List<Publisher>> getAllPublishers({required Params params});
+  Future<List<Tag>> getAllTags({required Params params});
+  Future<List<Store>> getAllStores({required Params params});
 }
 
 class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
@@ -27,31 +27,26 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
     required this.baseUrl,
   });
 
-  Uri _getUri({required String path, Map<String, String>? queryParameter}) {
-    final parameters = <String, String>{
-      'key': apiKey,
-    };
-    if (queryParameter != null) {
-      parameters.addAll(queryParameter);
-    }
+  Uri _getUri({required String path, required Map<String, String> params}) {
     return Uri.http(
       baseUrl,
       path,
-      parameters,
+      params,
     );
   }
 
   @override
-  Future<List<Creator>> getAllCreators() async {
+  Future<List<Creator>> getAllCreators({required Params params}) async {
     try {
-      final response = await client.get(_getUri(path: 'api/creators'));
+      final response = await client
+          .get(_getUri(path: 'api/creators', params: params.queryParameter));
       if (response.statusCode == 200) {
         if (response.body.isNotEmpty) {
           final List<Creator> creators =
               (jsonDecode(response.body)['results'] as List<dynamic>)
                   .map((e) => Creator.fromJson(e))
                   .toList();
-          log(creators.toString());
+          log('creators_length : ${creators.length}');
           return creators;
         } else {
           throw const ServerException(exception: 'Empty Response');
@@ -66,16 +61,17 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
   }
 
   @override
-  Future<List<Developer>> getAllDevelopers() async {
+  Future<List<Developer>> getAllDevelopers({required Params params}) async {
     try {
-      final response = await client.get(_getUri(path: 'api/developers'));
+      final response = await client
+          .get(_getUri(path: 'api/developers', params: params.queryParameter));
       if (response.statusCode == 200) {
         if (response.body.isNotEmpty) {
           final List<Developer> developers =
               (jsonDecode(response.body)['results'] as List<dynamic>)
                   .map((e) => Developer.fromJson(e))
                   .toList();
-          log(developers.toString());
+          log('developers_length : ${developers.length}');
           return developers;
         } else {
           throw const ServerException(exception: 'Empty Response');
@@ -91,17 +87,19 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
 
   @override
   Future<List<GameDetails>> getAllGames({
-    Map<String, String>? queryParameters,
+    required Params params,
   }) async {
     try {
-      final response = await client.get(_getUri(path: 'api/games'));
+      final response = await client
+          .get(_getUri(path: 'api/games', params: params.queryParameter));
       if (response.statusCode == 200) {
         if (response.body.isNotEmpty) {
           final List<GameDetails> games =
-              (jsonDecode(response.body)['results'] as List<dynamic>)
-                  .map((e) => GameDetails.fromJson(e))
-                  .toList();
-          log(games.toString());
+              (jsonDecode(response.body)['results'] as List<dynamic>?)
+                      ?.map((e) => GameDetails.fromJson(e))
+                      .toList() ??
+                  [];
+          log('games_length : ${games.length}');
           return games;
         } else {
           throw const ServerException(exception: 'Empty Response');
@@ -116,16 +114,18 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
   }
 
   @override
-  Future<List<Genre>> getAllGenres() async {
+  Future<List<Genre>> getAllGenres({required Params params}) async {
     try {
-      final response = await client.get(_getUri(path: 'api/genres'));
+      final response = await client
+          .get(_getUri(path: 'api/genres', params: params.queryParameter));
+      log(response.body.toString());
       if (response.statusCode == 200) {
         if (response.body.isNotEmpty) {
           final List<Genre> genres =
               (jsonDecode(response.body)['results'] as List<dynamic>)
                   .map((e) => Genre.fromJson(e))
                   .toList();
-          log(genres.toString());
+          log('genres_length : ${genres.length}');
           return genres;
         } else {
           throw const ServerException(exception: 'Empty Response');
@@ -140,9 +140,10 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
   }
 
   @override
-  Future<List<Platform>> getAllParentPlatforms() async {
+  Future<List<Platform>> getAllParentPlatforms({required Params params}) async {
     try {
-      final response = await client.get(_getUri(path: 'api/platforms'));
+      final response = await client
+          .get(_getUri(path: 'api/platforms', params: params.queryParameter));
       if (response.statusCode == 200) {
         if (response.body.isNotEmpty) {
           final List<Platform> parentPlatforms =
@@ -164,9 +165,10 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
   }
 
   @override
-  Future<List<Platform>> getAllPlatforms() async {
+  Future<List<Platform>> getAllPlatforms({required Params params}) async {
     try {
-      final response = await client.get(_getUri(path: 'api/platforms'));
+      final response = await client
+          .get(_getUri(path: 'api/platforms', params: params.queryParameter));
       if (response.statusCode == 200) {
         if (response.body.isNotEmpty) {
           final List<Platform> platforms =
@@ -188,9 +190,10 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
   }
 
   @override
-  Future<List<Publisher>> getAllPublishers() async {
+  Future<List<Publisher>> getAllPublishers({required Params params}) async {
     try {
-      final response = await client.get(_getUri(path: 'api/publishers'));
+      final response = await client
+          .get(_getUri(path: 'api/publishers', params: params.queryParameter));
       if (response.statusCode == 200) {
         if (response.body.isNotEmpty) {
           final List<Publisher> publishers =
@@ -212,9 +215,10 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
   }
 
   @override
-  Future<List<Store>> getAllStores() async {
+  Future<List<Store>> getAllStores({required Params params}) async {
     try {
-      final response = await client.get(_getUri(path: 'api/stores'));
+      final response = await client
+          .get(_getUri(path: 'api/stores', params: params.queryParameter));
       if (response.statusCode == 200) {
         if (response.body.isNotEmpty) {
           final List<Store> stores =
@@ -236,9 +240,10 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
   }
 
   @override
-  Future<List<Tag>> getAllTags() async {
+  Future<List<Tag>> getAllTags({required Params params}) async {
     try {
-      final response = await client.get(_getUri(path: 'api/tags'));
+      final response = await client
+          .get(_getUri(path: 'api/tags', params: params.queryParameter));
       if (response.statusCode == 200) {
         if (response.body.isNotEmpty) {
           final List<Tag> tags =

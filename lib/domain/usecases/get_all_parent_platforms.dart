@@ -9,6 +9,6 @@ class GetAllParentPlatforms {
 
   GetAllParentPlatforms(this.repository);
 
-  Future<Either<Failure, List<Platform>>> call(NoParams params) async =>
-      await repository.getAllPlatforms();
+  Future<Either<Failure, List<Platform>>> call(Params params) async =>
+      await repository.getAllPlatforms(params: params);
 }

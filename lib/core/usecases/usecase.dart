@@ -1,23 +1,12 @@
-import 'package:equatable/equatable.dart';
 import '../../utils/contants.dart' as constants;
 
-class NoParams extends Equatable {
-  final String apiKey;
-  const NoParams({
-    this.apiKey = constants.apiKey,
-  });
-  @override
-  List<Object?> get props => [apiKey];
-}
-
-class GameById extends Equatable {
-  final String apiKey;
-  final int id;
-  const GameById({
-    this.apiKey = constants.apiKey,
-    required this.id,
-  });
-
-  @override
-  List<Object?> get props => [apiKey, id];
+class Params {
+  final Map<String, String> queryParameter = {'key': constants.apiKey};
+  Params({
+    Map<String, String>? parameters,
+  }) {
+    if (parameters != null) {
+      queryParameter.addAll(parameters);
+    }
+  }
 }

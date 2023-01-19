@@ -8,18 +8,18 @@ part of 'added_by_status.dart';
 
 AddedByStatus _$AddedByStatusFromJson(Map<String, dynamic> json) =>
     AddedByStatus(
-      yet: json['yet'] as int,
       owned: json['owned'] as int,
-      beaten: json['beaten'] as int,
-      toplay: json['toplay'] as int,
-      dropped: json['dropped'] as int,
-      playing: json['playing'] as int,
+      yet: json['yet'] as int?,
+      beaten: json['beaten'] as int?,
+      toplay: json['toplay'] as int?,
+      dropped: json['dropped'] as int?,
+      playing: json['playing'] as int?,
     );
 
 Map<String, dynamic> _$AddedByStatusToJson(AddedByStatus instance) =>
     <String, dynamic>{
-      'yet': instance.yet,
       'owned': instance.owned,
+      'yet': instance.yet,
       'beaten': instance.beaten,
       'toplay': instance.toplay,
       'dropped': instance.dropped,

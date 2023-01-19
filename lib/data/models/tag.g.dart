@@ -11,8 +11,8 @@ Tag _$TagFromJson(Map<String, dynamic> json) => Tag(
       name: json['name'] as String,
       slug: json['slug'] as String,
       gamesCount: json['games_count'] as int,
-      imageBackground: json['image_background'] as String,
       language: json['language'] as String,
+      imageBackground: json['image_background'] as String?,
     );
 
 Map<String, dynamic> _$TagToJson(Tag instance) => <String, dynamic>{
@@ -20,6 +20,6 @@ Map<String, dynamic> _$TagToJson(Tag instance) => <String, dynamic>{
       'name': instance.name,
       'slug': instance.slug,
       'games_count': instance.gamesCount,
-      'image_background': instance.imageBackground,
       'language': instance.language,
+      'image_background': instance.imageBackground,
     };

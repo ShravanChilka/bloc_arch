@@ -25,34 +25,37 @@ GameDetails _$GameDetailsFromJson(Map<String, dynamic> json) => GameDetails(
       slug: json['slug'] as String,
       name: json['name'] as String,
       added: json['added'] as int,
-      released: json['released'] as String,
+      released: json['released'] as String?,
       tba: json['tba'] as bool,
-      backgroundImage: json['background_image'] as String,
+      backgroundImage: json['background_image'] as String?,
       rating: (json['rating'] as num).toDouble(),
       ratingTop: json['rating_top'] as int,
       ratings: (json['ratings'] as List<dynamic>)
           .map((e) => Rating.fromJson(e as Map<String, dynamic>))
           .toList(),
       ratingsCount: json['ratings_count'] as int,
-      addedByStatus: AddedByStatus.fromJson(
-          json['added_by_status'] as Map<String, dynamic>),
-      metacritic: json['metacritic'] as int,
+      addedByStatus: json['added_by_status'] == null
+          ? null
+          : AddedByStatus.fromJson(
+              json['added_by_status'] as Map<String, dynamic>),
+      metacritic: json['metacritic'] as int?,
       suggestionsCount: json['suggestions_count'] as int,
       playtime: json['playtime'] as int,
       updated: json['updated'] as String,
       platforms: (json['platforms'] as List<dynamic>)
           .map((e) => PlatformResult.fromJson(e as Map<String, dynamic>))
           .toList(),
-      stores: (json['stores'] as List<dynamic>)
-          .map((e) => StoreResult.fromJson(e as Map<String, dynamic>))
+      stores: (json['stores'] as List<dynamic>?)
+          ?.map((e) => StoreResult.fromJson(e as Map<String, dynamic>))
           .toList(),
       reviewsCount: json['reviews_count'] as int,
       reviewsTextCount: json['reviews_text_count'] as int,
       tags: (json['tags'] as List<dynamic>)
           .map((e) => Tag.fromJson(e as Map<String, dynamic>))
           .toList(),
-      esrbRating:
-          EsrbRating.fromJson(json['esrb_rating'] as Map<String, dynamic>),
+      esrbRating: json['esrb_rating'] == null
+          ? null
+          : EsrbRating.fromJson(json['esrb_rating'] as Map<String, dynamic>),
       shortScreenshots: (json['short_screenshots'] as List<dynamic>?)
           ?.map((e) => ShortScreenshot.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -76,8 +79,8 @@ Map<String, dynamic> _$GameDetailsToJson(GameDetails instance) =>
       'rating': instance.rating,
       'rating_top': instance.ratingTop,
       'ratings': instance.ratings,
-      'ratings_count': instance.ratingsCount,
       'added_by_status': instance.addedByStatus,
+      'ratings_count': instance.ratingsCount,
       'metacritic': instance.metacritic,
       'suggestions_count': instance.suggestionsCount,
       'playtime': instance.playtime,

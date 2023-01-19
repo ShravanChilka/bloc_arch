@@ -9,6 +9,6 @@ class GetAllGames {
 
   GetAllGames(this.repository);
 
-  Future<Either<Failure, List<GameDetails>>> call(NoParams params) async =>
-      await repository.getAllGames();
+  Future<Either<Failure, List<GameDetails>>> call(Params params) async =>
+      await repository.getAllGames(params: params);
 }

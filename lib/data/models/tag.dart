@@ -10,16 +10,16 @@ class Tag {
   final String name;
   final String slug;
   final int gamesCount;
-  final String imageBackground;
   final String language;
+  final String? imageBackground;
 
   const Tag({
     required this.id,
     required this.name,
     required this.slug,
     required this.gamesCount,
-    required this.imageBackground,
     required this.language,
+    this.imageBackground,
   });
 
   factory Tag.fromJson(Map<String, dynamic> json) => _$TagFromJson(json);

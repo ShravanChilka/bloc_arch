@@ -9,6 +9,6 @@ class GetAllTags {
 
   GetAllTags(this.repository);
 
-  Future<Either<Failure, List<Tag>>> call(NoParams params) async =>
-      await repository.getAllTags();
+  Future<Either<Failure, List<Tag>>> call(Params params) async =>
+      await repository.getAllTags(params: params);
 }

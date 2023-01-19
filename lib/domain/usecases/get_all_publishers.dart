@@ -9,6 +9,6 @@ class GetAllPublishers {
 
   GetAllPublishers(this.repository);
 
-  Future<Either<Failure, List<Publisher>>> call(NoParams params) async =>
-      await repository.getAllPublishers();
+  Future<Either<Failure, List<Publisher>>> call(Params params) async =>
+      await repository.getAllPublishers(params: params);
 }

@@ -6,20 +6,20 @@ part 'added_by_status.g.dart';
 @JsonSerializable(fieldRename: FieldRename.snake)
 @immutable
 class AddedByStatus {
-  final int yet;
   final int owned;
-  final int beaten;
-  final int toplay;
-  final int dropped;
-  final int playing;
+  final int? yet;
+  final int? beaten;
+  final int? toplay;
+  final int? dropped;
+  final int? playing;
 
   const AddedByStatus({
-    required this.yet,
     required this.owned,
-    required this.beaten,
-    required this.toplay,
-    required this.dropped,
-    required this.playing,
+    this.yet,
+    this.beaten,
+    this.toplay,
+    this.dropped,
+    this.playing,
   });
 
   factory AddedByStatus.fromJson(Map<String, dynamic> json) =>
