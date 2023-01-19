@@ -1,6 +1,6 @@
-import 'package:bloc_arch/display/explore/bloc/explore_games_bloc.dart';
-import 'package:bloc_arch/display/explore/bloc/explore_games_event.dart';
-import 'package:bloc_arch/display/explore/bloc/explore_games_state.dart';
+import 'package:bloc_arch/display/explore/all_games/bloc/all_games_bloc.dart';
+import 'package:bloc_arch/display/explore/all_games/bloc/all_games_event.dart';
+import 'package:bloc_arch/display/explore/all_games/bloc/all_games_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -26,14 +26,15 @@ class ExplorePage extends HookWidget {
                   ),
                 ),
                 ElevatedButton.icon(
-                  onPressed: () => context.read<ExploreGamesBloc>().add(
-                      ExploreGamesEventSearch(search: searchController.text)),
+                  onPressed: () => context
+                      .read<AllGamesBloc>()
+                      .add(AllGamesEventSearch(search: searchController.text)),
                   icon: const FaIcon(FontAwesomeIcons.magnifyingGlass),
                   label: const Text('Search'),
                 ),
               ],
             ),
-            BlocBuilder<ExploreGamesBloc, ExploreGamesState>(
+            BlocBuilder<AllGamesBloc, AllGamesState>(
               builder: (context, state) {
                 if (state.isLoading) {
                   return const Center(
@@ -47,8 +48,8 @@ class ExplorePage extends HookWidget {
                       ),
                       ElevatedButton(
                           onPressed: () => context
-                              .read<ExploreGamesBloc>()
-                              .add(const ExploreGamesEventGetAllGames()),
+                              .read<AllGamesBloc>()
+                              .add(const AllGamesEventGetAllGames()),
                           child: const Text('Refresh'))
                     ],
                   );
@@ -62,8 +63,8 @@ class ExplorePage extends HookWidget {
                               (index) {
                             return TextButton(
                                 onPressed: () => context
-                                    .read<ExploreGamesBloc>()
-                                    .add(ExploreGamesEventGenre(
+                                    .read<AllGamesBloc>()
+                                    .add(AllGamesEventGenre(
                                         id: state.genres![index].id)),
                                 child: Text(state.genres![index].name));
                           }),

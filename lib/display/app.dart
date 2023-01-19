@@ -1,8 +1,8 @@
 import 'package:bloc_arch/core/connection/network_info.dart';
 import 'package:bloc_arch/data/data_sources/games_remote_data_source.dart';
 import 'package:bloc_arch/data/repository_impl/games_repository_impl.dart';
-import 'package:bloc_arch/display/explore/bloc/explore_games_bloc.dart';
-import 'package:bloc_arch/display/explore/bloc/explore_games_event.dart';
+import 'package:bloc_arch/display/explore/all_games/bloc/all_games_bloc.dart';
+import 'package:bloc_arch/display/explore/all_games/bloc/all_games_event.dart';
 import 'home_page_view.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -25,11 +25,11 @@ class App extends StatelessWidget {
         ),
       ),
       child: BlocProvider(
-        create: (context) => ExploreGamesBloc(
+        create: (context) => AllGamesBloc(
           repository: context.read<GamesRepositoryImpl>(),
         )
-          ..add(const ExploreGamesEventGetAllGames())
-          ..add(const ExploreGamesEventGetAllGenres()),
+          ..add(const AllGamesEventGetAllGames())
+          ..add(const AllGamesEventGetAllGenres()),
         child: MaterialApp(
           theme: ThemeData(
             useMaterial3: true,
