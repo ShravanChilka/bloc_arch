@@ -29,5 +29,5 @@ class RatingModelResult {
   });
 
   factory RatingModelResult.fromJson(Map<String, dynamic> json) =>
-      _$RatingModelResultFromJson.fromJson(json);
+      _$RatingModelResultFromJson(json);
 }
