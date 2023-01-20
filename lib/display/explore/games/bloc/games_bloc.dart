@@ -3,15 +3,15 @@ import 'package:bloc_arch/core/usecases/usecase.dart';
 import 'package:bloc_arch/domain/repository/games_repository.dart';
 import 'package:bloc_arch/domain/usecases/get_all_games.dart';
 import 'package:bloc_arch/domain/usecases/get_all_genres.dart';
-import 'all_games_event.dart';
-import 'all_games_state.dart';
+import 'games_event.dart';
+import 'games_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AllGamesBloc extends Bloc<AllGamesEvent, AllGamesState> {
+class GamesBloc extends Bloc<GamesEvent, GamesState> {
   final GamesRepository repository;
-  AllGamesBloc({required this.repository})
+  GamesBloc({required this.repository})
       : super(
-          const AllGamesState(
+          const GamesState(
             isLoading: false,
             failure: null,
             games: null,
@@ -19,15 +19,15 @@ class AllGamesBloc extends Bloc<AllGamesEvent, AllGamesState> {
             tags: null,
           ),
         ) {
-    on<AllGamesEventGetAllGames>(_getAllGamesEvent);
-    on<AllGamesEventGetAllGenres>(_getAllGenres);
-    on<AllGamesEventSearch>(_searchGamesEvent);
-    on<AllGamesEventGenre>(_genreGamesEvent);
+    on<GamesEventGetAllGames>(_getGamesEvent);
+    on<GamesEventGetAllGenres>(_getAllGenres);
+    on<GamesEventSearch>(_searchGamesEvent);
+    on<GamesEventGenre>(_genreGamesEvent);
   }
 
-  FutureOr<void> _getAllGamesEvent(
-    AllGamesEventGetAllGames event,
-    Emitter<AllGamesState> emit,
+  FutureOr<void> _getGamesEvent(
+    GamesEventGetAllGames event,
+    Emitter<GamesState> emit,
   ) async {
     //* get all games event
     emit(state.copyWith(isLoading: true));
@@ -44,8 +44,8 @@ class AllGamesBloc extends Bloc<AllGamesEvent, AllGamesState> {
   }
 
   FutureOr<void> _searchGamesEvent(
-    AllGamesEventSearch event,
-    Emitter<AllGamesState> emit,
+    GamesEventSearch event,
+    Emitter<GamesState> emit,
   ) async {
     //* search event
     emit(state.copyWith(isLoading: true));
@@ -61,8 +61,8 @@ class AllGamesBloc extends Bloc<AllGamesEvent, AllGamesState> {
   }
 
   FutureOr<void> _getAllGenres(
-    AllGamesEventGetAllGenres event,
-    Emitter<AllGamesState> emit,
+    GamesEventGetAllGenres event,
+    Emitter<GamesState> emit,
   ) async {
     //* search event
     emit(state.copyWith(isLoading: true));
@@ -75,8 +75,8 @@ class AllGamesBloc extends Bloc<AllGamesEvent, AllGamesState> {
   }
 
   FutureOr<void> _genreGamesEvent(
-    AllGamesEventGenre event,
-    Emitter<AllGamesState> emit,
+    GamesEventGenre event,
+    Emitter<GamesState> emit,
   ) async {
     //* search event
     emit(state.copyWith(isLoading: true));

@@ -1,6 +1,6 @@
-import 'bloc/all_games_bloc.dart';
-import 'bloc/all_games_event.dart';
-import 'bloc/all_games_state.dart';
+import 'bloc/games_bloc.dart';
+import 'bloc/games_event.dart';
+import 'bloc/games_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,7 +9,7 @@ class AllGamesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AllGamesBloc, AllGamesState>(
+    return BlocBuilder<GamesBloc, GamesState>(
       builder: (context, state) {
         if (state.isLoading) {
           return const Center(
@@ -23,8 +23,8 @@ class AllGamesView extends StatelessWidget {
               ),
               ElevatedButton(
                   onPressed: () => context
-                      .read<AllGamesBloc>()
-                      .add(const AllGamesEventGetAllGames()),
+                      .read<GamesBloc>()
+                      .add(const GamesEventGetAllGames()),
                   child: const Text('Refresh'))
             ],
           );

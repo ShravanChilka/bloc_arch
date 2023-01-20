@@ -118,7 +118,6 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
     try {
       final response = await client
           .get(_getUri(path: 'api/genres', params: params.queryParameter));
-      log(response.body.toString());
       if (response.statusCode == 200) {
         if (response.body.isNotEmpty) {
           final List<Genre> genres =
@@ -150,7 +149,7 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
               (jsonDecode(response.body)['results'] as List<dynamic>)
                   .map((e) => Platform.fromJson(e))
                   .toList();
-          log(parentPlatforms.toString());
+          log('parent_platforms_length : ${parentPlatforms.length}');
           return parentPlatforms;
         } else {
           throw const ServerException(exception: 'Empty Response');
@@ -175,7 +174,7 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
               (jsonDecode(response.body)['results'] as List<dynamic>)
                   .map((e) => Platform.fromJson(e))
                   .toList();
-          log(platforms.toString());
+          log('platforms_length : ${platforms.length}');
           return platforms;
         } else {
           throw const ServerException(exception: 'Empty Response');
@@ -200,7 +199,7 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
               (jsonDecode(response.body)['results'] as List<dynamic>)
                   .map((e) => Publisher.fromJson(e))
                   .toList();
-          log(publishers.toString());
+          log('publishers_length : ${publishers.length}');
           return publishers;
         } else {
           throw const ServerException(exception: 'Empty Response');
@@ -225,7 +224,7 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
               (jsonDecode(response.body)['results'] as List<dynamic>)
                   .map((e) => Store.fromJson(e))
                   .toList();
-          log(stores.toString());
+          log('stores_length : ${stores.length}');
           return stores;
         } else {
           throw const ServerException(exception: 'Empty Response');
@@ -250,7 +249,7 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
               (jsonDecode(response.body)['results'] as List<dynamic>)
                   .map((e) => Tag.fromJson(e))
                   .toList();
-          log(tags.toString());
+          log('tags_length : ${tags.length}');
           return tags;
         } else {
           throw const ServerException(exception: 'Empty Response');
