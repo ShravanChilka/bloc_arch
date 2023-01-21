@@ -4,9 +4,8 @@ import '../entities/added_by_status.dart';
 part 'added_by_status_model.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-@immutable
 class AddedByStatusModel extends AddedByStatus {
-  const AddedByStatusModel({
+  AddedByStatusModel({
     required super.owned,
     super.beaten,
     super.dropped,

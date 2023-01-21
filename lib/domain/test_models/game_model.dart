@@ -6,16 +6,11 @@ import 'rating_model.dart';
 import 'short_screenshot_model.dart';
 import 'store_model.dart';
 import 'tag_model.dart';
-import 'package:flutter/foundation.dart' show immutable;
 import 'package:json_annotation/json_annotation.dart';
 import '../entities/game.dart';
-part 'game_model.g.dart';
+//part 'game_model.g.dart';
 
-@JsonSerializable(
-  fieldRename: FieldRename.snake,
-  converters: [AddedByStatusConverter()],
-)
-@immutable
+@JsonSerializable(fieldRename: FieldRename.snake)
 class GameModel extends Game {
   GameModel({
     required super.id,
@@ -36,8 +31,8 @@ class GameModel extends Game {
     super.metacritic,
     super.released,
     List<ShortScreenshotModel>? shortScreenshots,
-    @AddedByStatusConverter() AddedByStatusModel? addedByStatus,
-    EsrbRatingModel? esrbRating,
+    // AddedByStatusModel? addedByStatus,
+    // final EsrbRatingModel? esrbRating,
     required List<PlatformModelResult> platforms,
     required List<StoreModelResult> stores,
     required List<TagModel> tags,
@@ -45,31 +40,14 @@ class GameModel extends Game {
     required List<GenreModel> genres,
   }) : super(
           ratings: ratings,
-          addedByStatus: addedByStatus,
           platforms: platforms.map((e) => e.platform).toList(),
           stores: stores.map((e) => e.store).toList(),
           parentPlatforms: parentPlatforms.map((e) => e.platform).toList(),
           genres: genres,
           tags: tags,
-          esrbRating: esrbRating,
           shortScreenshots: shortScreenshots,
         );
 
-  factory GameModel.fromJson(Map<String, dynamic> json) =>
-      _$GameModelFromJson(json);
-}
-
-class AddedByStatusConverter
-    implements JsonConverter<AddedByStatusModel?, Map<String, dynamic>?> {
-  const AddedByStatusConverter();
-
-  @override
-  AddedByStatusModel? fromJson(Map<String, dynamic>? json) {
-    return json == null ? null : AddedByStatusModel.fromJson(json);
-  }
-
-  @override
-  Map<String, dynamic>? toJson(AddedByStatusModel? object) {
-    return {};
-  }
+  // factory GameModel.fromJson(Map<String, dynamic> json) =>
+  //     _$GameModelFromJson(json);
 }

@@ -3,14 +3,14 @@ import 'package:flutter/foundation.dart' show immutable;
 
 @immutable
 class AddedByStatus extends Equatable {
-  final int owned;
-  final int? yet;
-  final int? beaten;
-  final int? toplay;
-  final int? dropped;
-  final int? playing;
+  int owned;
+  int? yet;
+  int? beaten;
+  int? toplay;
+  int? dropped;
+  int? playing;
 
-  const AddedByStatus({
+  AddedByStatus({
     required this.owned,
     this.yet,
     this.beaten,
