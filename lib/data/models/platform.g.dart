@@ -115,6 +115,9 @@ class _$PlatformSerializer implements StructuredSerializer<Platform> {
       serializers.serialize(object.name, specifiedType: const FullType(String)),
       'slug',
       serializers.serialize(object.slug, specifiedType: const FullType(String)),
+      'isSelected',
+      serializers.serialize(object.isSelected,
+          specifiedType: const FullType(bool)),
     ];
     Object? value;
     value = object.gamesCount;
@@ -183,6 +186,10 @@ class _$PlatformSerializer implements StructuredSerializer<Platform> {
         case 'year_end':
           result.yearEnd = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int?;
+          break;
+        case 'isSelected':
+          result.isSelected = serializers.deserialize(value,
+              specifiedType: const FullType(bool))! as bool;
           break;
       }
     }
@@ -398,6 +405,8 @@ class _$Platform extends Platform {
   final int? yearStart;
   @override
   final int? yearEnd;
+  @override
+  final bool isSelected;
 
   factory _$Platform([void Function(PlatformBuilder)? updates]) =>
       (new PlatformBuilder()..update(updates))._build();
@@ -409,11 +418,14 @@ class _$Platform extends Platform {
       this.gamesCount,
       this.imageBackground,
       this.yearStart,
-      this.yearEnd})
+      this.yearEnd,
+      required this.isSelected})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(id, r'Platform', 'id');
     BuiltValueNullFieldError.checkNotNull(name, r'Platform', 'name');
     BuiltValueNullFieldError.checkNotNull(slug, r'Platform', 'slug');
+    BuiltValueNullFieldError.checkNotNull(
+        isSelected, r'Platform', 'isSelected');
   }
 
   @override
@@ -433,7 +445,8 @@ class _$Platform extends Platform {
         gamesCount == other.gamesCount &&
         imageBackground == other.imageBackground &&
         yearStart == other.yearStart &&
-        yearEnd == other.yearEnd;
+        yearEnd == other.yearEnd &&
+        isSelected == other.isSelected;
   }
 
   @override
@@ -446,6 +459,7 @@ class _$Platform extends Platform {
     _$hash = $jc(_$hash, imageBackground.hashCode);
     _$hash = $jc(_$hash, yearStart.hashCode);
     _$hash = $jc(_$hash, yearEnd.hashCode);
+    _$hash = $jc(_$hash, isSelected.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -459,7 +473,8 @@ class _$Platform extends Platform {
           ..add('gamesCount', gamesCount)
           ..add('imageBackground', imageBackground)
           ..add('yearStart', yearStart)
-          ..add('yearEnd', yearEnd))
+          ..add('yearEnd', yearEnd)
+          ..add('isSelected', isSelected))
         .toString();
   }
 }
@@ -496,7 +511,13 @@ class PlatformBuilder implements Builder<Platform, PlatformBuilder> {
   int? get yearEnd => _$this._yearEnd;
   set yearEnd(int? yearEnd) => _$this._yearEnd = yearEnd;
 
-  PlatformBuilder();
+  bool? _isSelected;
+  bool? get isSelected => _$this._isSelected;
+  set isSelected(bool? isSelected) => _$this._isSelected = isSelected;
+
+  PlatformBuilder() {
+    Platform._setDefaults(this);
+  }
 
   PlatformBuilder get _$this {
     final $v = _$v;
@@ -508,6 +529,7 @@ class PlatformBuilder implements Builder<Platform, PlatformBuilder> {
       _imageBackground = $v.imageBackground;
       _yearStart = $v.yearStart;
       _yearEnd = $v.yearEnd;
+      _isSelected = $v.isSelected;
       _$v = null;
     }
     return this;
@@ -538,7 +560,9 @@ class PlatformBuilder implements Builder<Platform, PlatformBuilder> {
             gamesCount: gamesCount,
             imageBackground: imageBackground,
             yearStart: yearStart,
-            yearEnd: yearEnd);
+            yearEnd: yearEnd,
+            isSelected: BuiltValueNullFieldError.checkNotNull(
+                isSelected, r'Platform', 'isSelected'));
     replace(_$result);
     return _$result;
   }

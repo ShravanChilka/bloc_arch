@@ -71,6 +71,9 @@ class _$DeveloperSerializer implements StructuredSerializer<Developer> {
       serializers.serialize(object.name, specifiedType: const FullType(String)),
       'slug',
       serializers.serialize(object.slug, specifiedType: const FullType(String)),
+      'isSelected',
+      serializers.serialize(object.isSelected,
+          specifiedType: const FullType(bool)),
     ];
     Object? value;
     value = object.imageBackground;
@@ -119,6 +122,10 @@ class _$DeveloperSerializer implements StructuredSerializer<Developer> {
         case 'games_count':
           result.gamesCount = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int?;
+          break;
+        case 'isSelected':
+          result.isSelected = serializers.deserialize(value,
+              specifiedType: const FullType(bool))! as bool;
           break;
       }
     }
@@ -235,6 +242,8 @@ class _$Developer extends Developer {
   final String? imageBackground;
   @override
   final int? gamesCount;
+  @override
+  final bool isSelected;
 
   factory _$Developer([void Function(DeveloperBuilder)? updates]) =>
       (new DeveloperBuilder()..update(updates))._build();
@@ -244,11 +253,14 @@ class _$Developer extends Developer {
       required this.name,
       required this.slug,
       this.imageBackground,
-      this.gamesCount})
+      this.gamesCount,
+      required this.isSelected})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(id, r'Developer', 'id');
     BuiltValueNullFieldError.checkNotNull(name, r'Developer', 'name');
     BuiltValueNullFieldError.checkNotNull(slug, r'Developer', 'slug');
+    BuiltValueNullFieldError.checkNotNull(
+        isSelected, r'Developer', 'isSelected');
   }
 
   @override
@@ -266,7 +278,8 @@ class _$Developer extends Developer {
         name == other.name &&
         slug == other.slug &&
         imageBackground == other.imageBackground &&
-        gamesCount == other.gamesCount;
+        gamesCount == other.gamesCount &&
+        isSelected == other.isSelected;
   }
 
   @override
@@ -277,6 +290,7 @@ class _$Developer extends Developer {
     _$hash = $jc(_$hash, slug.hashCode);
     _$hash = $jc(_$hash, imageBackground.hashCode);
     _$hash = $jc(_$hash, gamesCount.hashCode);
+    _$hash = $jc(_$hash, isSelected.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -288,7 +302,8 @@ class _$Developer extends Developer {
           ..add('name', name)
           ..add('slug', slug)
           ..add('imageBackground', imageBackground)
-          ..add('gamesCount', gamesCount))
+          ..add('gamesCount', gamesCount)
+          ..add('isSelected', isSelected))
         .toString();
   }
 }
@@ -317,7 +332,13 @@ class DeveloperBuilder implements Builder<Developer, DeveloperBuilder> {
   int? get gamesCount => _$this._gamesCount;
   set gamesCount(int? gamesCount) => _$this._gamesCount = gamesCount;
 
-  DeveloperBuilder();
+  bool? _isSelected;
+  bool? get isSelected => _$this._isSelected;
+  set isSelected(bool? isSelected) => _$this._isSelected = isSelected;
+
+  DeveloperBuilder() {
+    Developer._setDefaults(this);
+  }
 
   DeveloperBuilder get _$this {
     final $v = _$v;
@@ -327,6 +348,7 @@ class DeveloperBuilder implements Builder<Developer, DeveloperBuilder> {
       _slug = $v.slug;
       _imageBackground = $v.imageBackground;
       _gamesCount = $v.gamesCount;
+      _isSelected = $v.isSelected;
       _$v = null;
     }
     return this;
@@ -355,7 +377,9 @@ class DeveloperBuilder implements Builder<Developer, DeveloperBuilder> {
             slug: BuiltValueNullFieldError.checkNotNull(
                 slug, r'Developer', 'slug'),
             imageBackground: imageBackground,
-            gamesCount: gamesCount);
+            gamesCount: gamesCount,
+            isSelected: BuiltValueNullFieldError.checkNotNull(
+                isSelected, r'Developer', 'isSelected'));
     replace(_$result);
     return _$result;
   }

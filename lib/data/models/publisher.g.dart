@@ -71,6 +71,9 @@ class _$PublisherSerializer implements StructuredSerializer<Publisher> {
       serializers.serialize(object.name, specifiedType: const FullType(String)),
       'slug',
       serializers.serialize(object.slug, specifiedType: const FullType(String)),
+      'isSelected',
+      serializers.serialize(object.isSelected,
+          specifiedType: const FullType(bool)),
     ];
     Object? value;
     value = object.image;
@@ -130,6 +133,10 @@ class _$PublisherSerializer implements StructuredSerializer<Publisher> {
         case 'games_count':
           result.gamesCount = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int?;
+          break;
+        case 'isSelected':
+          result.isSelected = serializers.deserialize(value,
+              specifiedType: const FullType(bool))! as bool;
           break;
       }
     }
@@ -248,6 +255,8 @@ class _$Publisher extends Publisher {
   final String? imageBackground;
   @override
   final int? gamesCount;
+  @override
+  final bool isSelected;
 
   factory _$Publisher([void Function(PublisherBuilder)? updates]) =>
       (new PublisherBuilder()..update(updates))._build();
@@ -258,11 +267,14 @@ class _$Publisher extends Publisher {
       required this.slug,
       this.image,
       this.imageBackground,
-      this.gamesCount})
+      this.gamesCount,
+      required this.isSelected})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(id, r'Publisher', 'id');
     BuiltValueNullFieldError.checkNotNull(name, r'Publisher', 'name');
     BuiltValueNullFieldError.checkNotNull(slug, r'Publisher', 'slug');
+    BuiltValueNullFieldError.checkNotNull(
+        isSelected, r'Publisher', 'isSelected');
   }
 
   @override
@@ -281,7 +293,8 @@ class _$Publisher extends Publisher {
         slug == other.slug &&
         image == other.image &&
         imageBackground == other.imageBackground &&
-        gamesCount == other.gamesCount;
+        gamesCount == other.gamesCount &&
+        isSelected == other.isSelected;
   }
 
   @override
@@ -293,6 +306,7 @@ class _$Publisher extends Publisher {
     _$hash = $jc(_$hash, image.hashCode);
     _$hash = $jc(_$hash, imageBackground.hashCode);
     _$hash = $jc(_$hash, gamesCount.hashCode);
+    _$hash = $jc(_$hash, isSelected.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -305,7 +319,8 @@ class _$Publisher extends Publisher {
           ..add('slug', slug)
           ..add('image', image)
           ..add('imageBackground', imageBackground)
-          ..add('gamesCount', gamesCount))
+          ..add('gamesCount', gamesCount)
+          ..add('isSelected', isSelected))
         .toString();
   }
 }
@@ -338,7 +353,13 @@ class PublisherBuilder implements Builder<Publisher, PublisherBuilder> {
   int? get gamesCount => _$this._gamesCount;
   set gamesCount(int? gamesCount) => _$this._gamesCount = gamesCount;
 
-  PublisherBuilder();
+  bool? _isSelected;
+  bool? get isSelected => _$this._isSelected;
+  set isSelected(bool? isSelected) => _$this._isSelected = isSelected;
+
+  PublisherBuilder() {
+    Publisher._setDefaults(this);
+  }
 
   PublisherBuilder get _$this {
     final $v = _$v;
@@ -349,6 +370,7 @@ class PublisherBuilder implements Builder<Publisher, PublisherBuilder> {
       _image = $v.image;
       _imageBackground = $v.imageBackground;
       _gamesCount = $v.gamesCount;
+      _isSelected = $v.isSelected;
       _$v = null;
     }
     return this;
@@ -378,7 +400,9 @@ class PublisherBuilder implements Builder<Publisher, PublisherBuilder> {
                 slug, r'Publisher', 'slug'),
             image: image,
             imageBackground: imageBackground,
-            gamesCount: gamesCount);
+            gamesCount: gamesCount,
+            isSelected: BuiltValueNullFieldError.checkNotNull(
+                isSelected, r'Publisher', 'isSelected'));
     replace(_$result);
     return _$result;
   }

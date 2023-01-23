@@ -1,11 +1,17 @@
+import 'dart:developer';
+
 import 'package:bloc_arch/display/explore/creators/bloc/creators_bloc.dart';
 import 'package:bloc_arch/display/explore/creators/bloc/creators_state.dart';
 import 'package:bloc_arch/display/explore/developers/bloc/developers_bloc.dart';
 import 'package:bloc_arch/display/explore/developers/bloc/developers_state.dart';
 import 'package:bloc_arch/display/explore/games/bloc/games_bloc.dart';
+import 'package:bloc_arch/display/explore/games/bloc/games_event.dart';
 import 'package:bloc_arch/display/explore/games/bloc/games_state.dart';
+import 'package:bloc_arch/display/explore/games/games_list_view.dart';
+import 'package:bloc_arch/display/explore/genres/all_genres_view.dart';
 import 'package:bloc_arch/display/explore/genres/bloc/genres_bloc.dart';
 import 'package:bloc_arch/display/explore/genres/bloc/genres_event.dart';
+import 'package:bloc_arch/display/explore/genres/bloc/genres_state.dart';
 import 'package:bloc_arch/display/explore/platforms/bloc/platforms_bloc.dart';
 import 'package:bloc_arch/display/explore/platforms/bloc/platforms_state.dart';
 import 'package:bloc_arch/display/explore/publishers/bloc/publishers_bloc.dart';
@@ -28,22 +34,14 @@ class ExplorePage extends StatelessWidget {
         child: Column(
           children: [
             ElevatedButton(
-                onPressed: () =>
-                    context.read<GenresBloc>().add(const GenresEventGetAll()),
-                child: const Text('Genres')),
-            BlocBuilder<TagsBloc, TagsState>(
-              builder: (context, state) {
-                if (state.isLoading) {
-                  return const Text('Loading...');
-                } else if (state.failure != null) {
-                  return Text(state.failure!.errorMessage.toString());
-                } else if (state.tags != null) {
-                  return Text(state.tags!.length.toString());
-                } else {
-                  return const Text('null');
-                }
+              onPressed: () {
+                final genres = context.read<GenresBloc>().state.genres;
+                context.read<GamesBloc>().add(GamesEventFilter(genres: genres));
               },
-            )
+              child: const Text('Filter'),
+            ),
+            const AllGenresView(),
+            const AllGamesView(),
           ],
         ),
       ),

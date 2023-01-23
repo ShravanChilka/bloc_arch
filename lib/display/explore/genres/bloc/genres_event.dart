@@ -9,3 +9,19 @@ abstract class GenresEvent {
 class GenresEventGetAll extends GenresEvent {
   const GenresEventGetAll();
 }
+
+@immutable
+class GenresEventSelected extends GenresEvent {
+  final int index;
+  const GenresEventSelected({
+    required this.index,
+  });
+}
+
+@immutable
+class GenresEventUnselected extends GenresEvent {
+  final int index;
+  const GenresEventUnselected({
+    required this.index,
+  });
+}

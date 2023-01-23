@@ -52,4 +52,8 @@ abstract class Publisher implements Built<Publisher, PublisherBuilder> {
   String? get imageBackground;
   @BuiltValueField(wireName: 'games_count')
   int? get gamesCount;
+
+  bool get isSelected;
+  @BuiltValueHook(initializeBuilder: true)
+  static void _setDefaults(PublisherBuilder b) => b..isSelected = false;
 }

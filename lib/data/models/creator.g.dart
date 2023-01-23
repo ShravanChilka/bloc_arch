@@ -70,6 +70,9 @@ class _$CreatorSerializer implements StructuredSerializer<Creator> {
       serializers.serialize(object.name, specifiedType: const FullType(String)),
       'slug',
       serializers.serialize(object.slug, specifiedType: const FullType(String)),
+      'isSelected',
+      serializers.serialize(object.isSelected,
+          specifiedType: const FullType(bool)),
     ];
     Object? value;
     value = object.image;
@@ -129,6 +132,10 @@ class _$CreatorSerializer implements StructuredSerializer<Creator> {
         case 'games_count':
           result.gamesCount = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int?;
+          break;
+        case 'isSelected':
+          result.isSelected = serializers.deserialize(value,
+              specifiedType: const FullType(bool))! as bool;
           break;
       }
     }
@@ -245,6 +252,8 @@ class _$Creator extends Creator {
   final String? imageBackground;
   @override
   final int? gamesCount;
+  @override
+  final bool isSelected;
 
   factory _$Creator([void Function(CreatorBuilder)? updates]) =>
       (new CreatorBuilder()..update(updates))._build();
@@ -255,11 +264,13 @@ class _$Creator extends Creator {
       required this.slug,
       this.image,
       this.imageBackground,
-      this.gamesCount})
+      this.gamesCount,
+      required this.isSelected})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(id, r'Creator', 'id');
     BuiltValueNullFieldError.checkNotNull(name, r'Creator', 'name');
     BuiltValueNullFieldError.checkNotNull(slug, r'Creator', 'slug');
+    BuiltValueNullFieldError.checkNotNull(isSelected, r'Creator', 'isSelected');
   }
 
   @override
@@ -278,7 +289,8 @@ class _$Creator extends Creator {
         slug == other.slug &&
         image == other.image &&
         imageBackground == other.imageBackground &&
-        gamesCount == other.gamesCount;
+        gamesCount == other.gamesCount &&
+        isSelected == other.isSelected;
   }
 
   @override
@@ -290,6 +302,7 @@ class _$Creator extends Creator {
     _$hash = $jc(_$hash, image.hashCode);
     _$hash = $jc(_$hash, imageBackground.hashCode);
     _$hash = $jc(_$hash, gamesCount.hashCode);
+    _$hash = $jc(_$hash, isSelected.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -302,7 +315,8 @@ class _$Creator extends Creator {
           ..add('slug', slug)
           ..add('image', image)
           ..add('imageBackground', imageBackground)
-          ..add('gamesCount', gamesCount))
+          ..add('gamesCount', gamesCount)
+          ..add('isSelected', isSelected))
         .toString();
   }
 }
@@ -335,7 +349,13 @@ class CreatorBuilder implements Builder<Creator, CreatorBuilder> {
   int? get gamesCount => _$this._gamesCount;
   set gamesCount(int? gamesCount) => _$this._gamesCount = gamesCount;
 
-  CreatorBuilder();
+  bool? _isSelected;
+  bool? get isSelected => _$this._isSelected;
+  set isSelected(bool? isSelected) => _$this._isSelected = isSelected;
+
+  CreatorBuilder() {
+    Creator._setDefaults(this);
+  }
 
   CreatorBuilder get _$this {
     final $v = _$v;
@@ -346,6 +366,7 @@ class CreatorBuilder implements Builder<Creator, CreatorBuilder> {
       _image = $v.image;
       _imageBackground = $v.imageBackground;
       _gamesCount = $v.gamesCount;
+      _isSelected = $v.isSelected;
       _$v = null;
     }
     return this;
@@ -375,7 +396,9 @@ class CreatorBuilder implements Builder<Creator, CreatorBuilder> {
                 BuiltValueNullFieldError.checkNotNull(slug, r'Creator', 'slug'),
             image: image,
             imageBackground: imageBackground,
-            gamesCount: gamesCount);
+            gamesCount: gamesCount,
+            isSelected: BuiltValueNullFieldError.checkNotNull(
+                isSelected, r'Creator', 'isSelected'));
     replace(_$result);
     return _$result;
   }

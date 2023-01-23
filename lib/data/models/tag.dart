@@ -48,4 +48,9 @@ abstract class Tag implements Built<Tag, TagBuilder> {
   int? get gamesCount;
   @BuiltValueField(wireName: 'image_background')
   String? get imageBackground;
+
+  bool get isSelected;
+
+  @BuiltValueHook(initializeBuilder: true)
+  static void _setDefaults(TagBuilder b) => b..isSelected = false;
 }

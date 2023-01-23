@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:bloc_arch/core/usecases/usecase.dart';
 import 'package:bloc_arch/data/models/creator.dart';
 import 'package:bloc_arch/data/models/genre.dart';
@@ -110,49 +111,168 @@ class GamesBloc extends Bloc<GamesEvent, GamesState> {
     GamesEventFilter event,
     Emitter<GamesState> emit,
   ) async {
-    final List<Genre>? genres = event.genres;
-    final List<Creator>? creators = event.creators;
-    final List<Publisher>? publishers = event.publishers;
-    final List<Developer>? developers = event.developers;
-    final List<Platform>? platforms = event.platforms;
-    final List<Platform>? parentPlatforms = event.parentPlatforms;
-    final List<Store>? stores = event.stores;
-    final List<Tag>? tags = event.tags;
-    final String? genreParameters = genres != null
-        ? (genres.map((e) => e.id).toList())
-            .toString()
-            .replaceAll('[', '')
-            .replaceAll(']', '')
-        : null;
-    final String? creatorsParameters = creators != null
-        ? (creators.map((e) => e.id).toList())
-            .toString()
-            .replaceAll('[', '')
-            .replaceAll(']', '')
-        : null;
-    final String? publishersParameters = publishers != null
-        ? (publishers.map((e) => e.id).toList())
-            .toString()
-            .replaceAll('[', '')
-            .replaceAll(']', '')
-        : null;
+    emit(state.copyWith(isLoading: true));
+    Map<String, String> parameters = {};
+    parameters.addAll(getParamters(Type.genre, event.genres) ?? {});
+    parameters.addAll(getParamters(Type.creator, event.creators) ?? {});
+    parameters.addAll(getParamters(Type.publisher, event.publishers) ?? {});
+    parameters.addAll(getParamters(Type.developer, event.developers) ?? {});
+    parameters.addAll(getParamters(Type.platform, event.platforms) ?? {});
+    parameters
+        .addAll(getParamters(Type.parentPlatform, event.parentPlatforms) ?? {});
+    parameters.addAll(getParamters(Type.store, event.stores) ?? {});
+    parameters.addAll(getParamters(Type.tag, event.tags) ?? {});
+    log(parameters.toString());
+    final result =
+        await GetAllGames(repository).call(Params(parameters: parameters));
+    result.fold((failure) {
+      emit(state.copyWith(isLoading: false, failure: failure, games: null));
+    }, (data) {
+      emit(state.copyWith(isLoading: false, failure: null, games: data));
+    });
   }
 }
 
-extension Paramter<T> on List<T>? {
-  Map<String, String>? get parmaters {
-    final list = this;
-    final cls = T;
-    if (cls is Genre) {
-      if (list != null) {
-        final parameters = (list as List<Genre>)
+enum Type {
+  genre,
+  creator,
+  publisher,
+  developer,
+  platform,
+  parentPlatform,
+  store,
+  tag,
+}
+
+Map<String, String>? getParamters(Type type, List<dynamic>? list) {
+  switch (type) {
+    case Type.genre:
+      List<Genre> selected = [];
+      for (Genre item in (list as List<Genre>?) ?? []) {
+        if (item.isSelected) {
+          selected.add(item);
+        }
+      }
+      if (selected.isNotEmpty) {
+        final parameters = selected
+            .map((e) => e.id)
+            .toString()
+            .replaceAll('(', '')
+            .replaceAll(')', '');
+        return {'genres': parameters};
+      }
+      return null;
+    case Type.creator:
+      List<Creator> selected = [];
+      for (Creator item in (list as List<Creator>?) ?? []) {
+        if (item.isSelected) {
+          selected.add(item);
+        }
+      }
+      if (selected.isNotEmpty) {
+        final parameters = selected
             .map((e) => e.id)
             .toString()
             .replaceAll('[', '')
             .replaceAll(']', '');
-        return {'genre': parameters};
+        return {'creators': parameters};
       }
-    }
-    return null;
+      return null;
+    case Type.publisher:
+      List<Publisher> selected = [];
+      for (Publisher item in (list as List<Publisher>?) ?? []) {
+        if (item.isSelected) {
+          selected.add(item);
+        }
+      }
+      if (selected.isNotEmpty) {
+        final parameters = selected
+            .map((e) => e.id)
+            .toString()
+            .replaceAll('[', '')
+            .replaceAll(']', '');
+        return {'publishers': parameters};
+      }
+      return null;
+    case Type.developer:
+      List<Developer> selected = [];
+      for (Developer item in (list as List<Developer>?) ?? []) {
+        if (item.isSelected) {
+          selected.add(item);
+        }
+      }
+      if (selected.isNotEmpty) {
+        final parameters = selected
+            .map((e) => e.id)
+            .toString()
+            .replaceAll('[', '')
+            .replaceAll(']', '');
+        return {'developers': parameters};
+      }
+      return null;
+    case Type.platform:
+      List<Platform> selected = [];
+      for (Platform item in (list as List<Platform>?) ?? []) {
+        if (item.isSelected) {
+          selected.add(item);
+        }
+      }
+      if (selected.isNotEmpty) {
+        final parameters = selected
+            .map((e) => e.id)
+            .toString()
+            .replaceAll('[', '')
+            .replaceAll(']', '');
+        return {'platforms': parameters};
+      }
+      return null;
+    case Type.parentPlatform:
+      List<Platform> selected = [];
+      for (Platform item in (list as List<Platform>?) ?? []) {
+        if (item.isSelected) {
+          selected.add(item);
+        }
+      }
+      if (selected.isNotEmpty) {
+        final parameters = selected
+            .map((e) => e.id)
+            .toString()
+            .replaceAll('[', '')
+            .replaceAll(']', '');
+        return {'parent_platforms': parameters};
+      }
+      return null;
+    case Type.store:
+      List<Store> selected = [];
+      for (Store item in (list as List<Store>?) ?? []) {
+        if (item.isSelected) {
+          selected.add(item);
+        }
+      }
+      if (selected.isNotEmpty) {
+        final parameters = selected
+            .map((e) => e.id)
+            .toString()
+            .replaceAll('[', '')
+            .replaceAll(']', '');
+        return {'stores': parameters};
+      }
+      return null;
+    case Type.tag:
+      List<Tag> selected = [];
+      for (Tag item in (list as List<Tag>?) ?? []) {
+        if (item.isSelected) {
+          selected.add(item);
+        }
+      }
+      if (selected.isNotEmpty) {
+        final parameters = selected
+            .map((e) => e.id)
+            .toString()
+            .replaceAll('[', '')
+            .replaceAll(']', '');
+        return {'tags': parameters};
+      }
+      return null;
   }
 }

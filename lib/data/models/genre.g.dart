@@ -68,6 +68,9 @@ class _$GenreSerializer implements StructuredSerializer<Genre> {
       serializers.serialize(object.name, specifiedType: const FullType(String)),
       'slug',
       serializers.serialize(object.slug, specifiedType: const FullType(String)),
+      'isSelected',
+      serializers.serialize(object.isSelected,
+          specifiedType: const FullType(bool)),
     ];
     Object? value;
     value = object.gamesCount;
@@ -116,6 +119,10 @@ class _$GenreSerializer implements StructuredSerializer<Genre> {
         case 'image_background':
           result.imageBackground = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
+          break;
+        case 'isSelected':
+          result.isSelected = serializers.deserialize(value,
+              specifiedType: const FullType(bool))! as bool;
           break;
       }
     }
@@ -226,6 +233,8 @@ class _$Genre extends Genre {
   final int? gamesCount;
   @override
   final String? imageBackground;
+  @override
+  final bool isSelected;
 
   factory _$Genre([void Function(GenreBuilder)? updates]) =>
       (new GenreBuilder()..update(updates))._build();
@@ -235,11 +244,13 @@ class _$Genre extends Genre {
       required this.name,
       required this.slug,
       this.gamesCount,
-      this.imageBackground})
+      this.imageBackground,
+      required this.isSelected})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(id, r'Genre', 'id');
     BuiltValueNullFieldError.checkNotNull(name, r'Genre', 'name');
     BuiltValueNullFieldError.checkNotNull(slug, r'Genre', 'slug');
+    BuiltValueNullFieldError.checkNotNull(isSelected, r'Genre', 'isSelected');
   }
 
   @override
@@ -257,7 +268,8 @@ class _$Genre extends Genre {
         name == other.name &&
         slug == other.slug &&
         gamesCount == other.gamesCount &&
-        imageBackground == other.imageBackground;
+        imageBackground == other.imageBackground &&
+        isSelected == other.isSelected;
   }
 
   @override
@@ -268,6 +280,7 @@ class _$Genre extends Genre {
     _$hash = $jc(_$hash, slug.hashCode);
     _$hash = $jc(_$hash, gamesCount.hashCode);
     _$hash = $jc(_$hash, imageBackground.hashCode);
+    _$hash = $jc(_$hash, isSelected.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -279,7 +292,8 @@ class _$Genre extends Genre {
           ..add('name', name)
           ..add('slug', slug)
           ..add('gamesCount', gamesCount)
-          ..add('imageBackground', imageBackground))
+          ..add('imageBackground', imageBackground)
+          ..add('isSelected', isSelected))
         .toString();
   }
 }
@@ -308,7 +322,13 @@ class GenreBuilder implements Builder<Genre, GenreBuilder> {
   set imageBackground(String? imageBackground) =>
       _$this._imageBackground = imageBackground;
 
-  GenreBuilder();
+  bool? _isSelected;
+  bool? get isSelected => _$this._isSelected;
+  set isSelected(bool? isSelected) => _$this._isSelected = isSelected;
+
+  GenreBuilder() {
+    Genre._setDefaults(this);
+  }
 
   GenreBuilder get _$this {
     final $v = _$v;
@@ -318,6 +338,7 @@ class GenreBuilder implements Builder<Genre, GenreBuilder> {
       _slug = $v.slug;
       _gamesCount = $v.gamesCount;
       _imageBackground = $v.imageBackground;
+      _isSelected = $v.isSelected;
       _$v = null;
     }
     return this;
@@ -344,7 +365,9 @@ class GenreBuilder implements Builder<Genre, GenreBuilder> {
             name: BuiltValueNullFieldError.checkNotNull(name, r'Genre', 'name'),
             slug: BuiltValueNullFieldError.checkNotNull(slug, r'Genre', 'slug'),
             gamesCount: gamesCount,
-            imageBackground: imageBackground);
+            imageBackground: imageBackground,
+            isSelected: BuiltValueNullFieldError.checkNotNull(
+                isSelected, r'Genre', 'isSelected'));
     replace(_$result);
     return _$result;
   }

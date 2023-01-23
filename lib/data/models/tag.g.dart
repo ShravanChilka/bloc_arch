@@ -68,6 +68,9 @@ class _$TagSerializer implements StructuredSerializer<Tag> {
       serializers.serialize(object.name, specifiedType: const FullType(String)),
       'slug',
       serializers.serialize(object.slug, specifiedType: const FullType(String)),
+      'isSelected',
+      serializers.serialize(object.isSelected,
+          specifiedType: const FullType(bool)),
     ];
     Object? value;
     value = object.gamesCount;
@@ -116,6 +119,10 @@ class _$TagSerializer implements StructuredSerializer<Tag> {
         case 'image_background':
           result.imageBackground = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
+          break;
+        case 'isSelected':
+          result.isSelected = serializers.deserialize(value,
+              specifiedType: const FullType(bool))! as bool;
           break;
       }
     }
@@ -226,6 +233,8 @@ class _$Tag extends Tag {
   final int? gamesCount;
   @override
   final String? imageBackground;
+  @override
+  final bool isSelected;
 
   factory _$Tag([void Function(TagBuilder)? updates]) =>
       (new TagBuilder()..update(updates))._build();
@@ -235,11 +244,13 @@ class _$Tag extends Tag {
       required this.name,
       required this.slug,
       this.gamesCount,
-      this.imageBackground})
+      this.imageBackground,
+      required this.isSelected})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(id, r'Tag', 'id');
     BuiltValueNullFieldError.checkNotNull(name, r'Tag', 'name');
     BuiltValueNullFieldError.checkNotNull(slug, r'Tag', 'slug');
+    BuiltValueNullFieldError.checkNotNull(isSelected, r'Tag', 'isSelected');
   }
 
   @override
@@ -257,7 +268,8 @@ class _$Tag extends Tag {
         name == other.name &&
         slug == other.slug &&
         gamesCount == other.gamesCount &&
-        imageBackground == other.imageBackground;
+        imageBackground == other.imageBackground &&
+        isSelected == other.isSelected;
   }
 
   @override
@@ -268,6 +280,7 @@ class _$Tag extends Tag {
     _$hash = $jc(_$hash, slug.hashCode);
     _$hash = $jc(_$hash, gamesCount.hashCode);
     _$hash = $jc(_$hash, imageBackground.hashCode);
+    _$hash = $jc(_$hash, isSelected.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -279,7 +292,8 @@ class _$Tag extends Tag {
           ..add('name', name)
           ..add('slug', slug)
           ..add('gamesCount', gamesCount)
-          ..add('imageBackground', imageBackground))
+          ..add('imageBackground', imageBackground)
+          ..add('isSelected', isSelected))
         .toString();
   }
 }
@@ -308,7 +322,13 @@ class TagBuilder implements Builder<Tag, TagBuilder> {
   set imageBackground(String? imageBackground) =>
       _$this._imageBackground = imageBackground;
 
-  TagBuilder();
+  bool? _isSelected;
+  bool? get isSelected => _$this._isSelected;
+  set isSelected(bool? isSelected) => _$this._isSelected = isSelected;
+
+  TagBuilder() {
+    Tag._setDefaults(this);
+  }
 
   TagBuilder get _$this {
     final $v = _$v;
@@ -318,6 +338,7 @@ class TagBuilder implements Builder<Tag, TagBuilder> {
       _slug = $v.slug;
       _gamesCount = $v.gamesCount;
       _imageBackground = $v.imageBackground;
+      _isSelected = $v.isSelected;
       _$v = null;
     }
     return this;
@@ -344,7 +365,9 @@ class TagBuilder implements Builder<Tag, TagBuilder> {
             name: BuiltValueNullFieldError.checkNotNull(name, r'Tag', 'name'),
             slug: BuiltValueNullFieldError.checkNotNull(slug, r'Tag', 'slug'),
             gamesCount: gamesCount,
-            imageBackground: imageBackground);
+            imageBackground: imageBackground,
+            isSelected: BuiltValueNullFieldError.checkNotNull(
+                isSelected, r'Tag', 'isSelected'));
     replace(_$result);
     return _$result;
   }

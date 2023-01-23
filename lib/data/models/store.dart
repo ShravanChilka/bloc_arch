@@ -63,4 +63,7 @@ abstract class Store implements Built<Store, StoreBuilder> {
   String get name;
   @BuiltValueField(wireName: 'slug')
   String get slug;
+  bool get isSelected;
+  @BuiltValueHook(initializeBuilder: true)
+  static void _setDefaults(StoreBuilder b) => b..isSelected = false;
 }

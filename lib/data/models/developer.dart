@@ -50,4 +50,8 @@ abstract class Developer implements Built<Developer, DeveloperBuilder> {
   String? get imageBackground;
   @BuiltValueField(wireName: 'games_count')
   int? get gamesCount;
+
+  bool get isSelected;
+  @BuiltValueHook(initializeBuilder: true)
+  static void _setDefaults(DeveloperBuilder b) => b..isSelected = false;
 }

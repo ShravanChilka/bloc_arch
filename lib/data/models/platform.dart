@@ -75,4 +75,8 @@ abstract class Platform implements Built<Platform, PlatformBuilder> {
   int? get yearStart;
   @BuiltValueField(wireName: 'year_end')
   int? get yearEnd;
+
+  bool get isSelected;
+  @BuiltValueHook(initializeBuilder: true)
+  static void _setDefaults(PlatformBuilder b) => b..isSelected = false;
 }

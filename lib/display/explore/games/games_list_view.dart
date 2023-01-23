@@ -12,23 +12,10 @@ class AllGamesView extends StatelessWidget {
     return BlocBuilder<GamesBloc, GamesState>(
       builder: (context, state) {
         if (state.isLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const Text('Loading...');
         } else if (state.failure != null) {
-          return Column(
-            children: [
-              Center(
-                child: Text(state.failure!.errorMessage.toString()),
-              ),
-              ElevatedButton(
-                  onPressed: () => context
-                      .read<GamesBloc>()
-                      .add(const GamesEventGetAllGames()),
-                  child: const Text('Refresh'))
-            ],
-          );
-        } else {
+          return Text(state.failure!.errorMessage.toString());
+        } else if (state.games != null) {
           return Expanded(
             child: ListView.builder(
               shrinkWrap: true,
@@ -48,6 +35,8 @@ class AllGamesView extends StatelessWidget {
               },
             ),
           );
+        } else {
+          return const Text('null');
         }
       },
     );

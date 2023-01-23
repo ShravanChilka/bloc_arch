@@ -108,6 +108,9 @@ class _$StoreSerializer implements StructuredSerializer<Store> {
       serializers.serialize(object.name, specifiedType: const FullType(String)),
       'slug',
       serializers.serialize(object.slug, specifiedType: const FullType(String)),
+      'isSelected',
+      serializers.serialize(object.isSelected,
+          specifiedType: const FullType(bool)),
     ];
 
     return result;
@@ -135,6 +138,10 @@ class _$StoreSerializer implements StructuredSerializer<Store> {
         case 'slug':
           result.slug = serializers.deserialize(value,
               specifiedType: const FullType(String))! as String;
+          break;
+        case 'isSelected':
+          result.isSelected = serializers.deserialize(value,
+              specifiedType: const FullType(bool))! as bool;
           break;
       }
     }
@@ -332,15 +339,22 @@ class _$Store extends Store {
   final String name;
   @override
   final String slug;
+  @override
+  final bool isSelected;
 
   factory _$Store([void Function(StoreBuilder)? updates]) =>
       (new StoreBuilder()..update(updates))._build();
 
-  _$Store._({required this.id, required this.name, required this.slug})
+  _$Store._(
+      {required this.id,
+      required this.name,
+      required this.slug,
+      required this.isSelected})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(id, r'Store', 'id');
     BuiltValueNullFieldError.checkNotNull(name, r'Store', 'name');
     BuiltValueNullFieldError.checkNotNull(slug, r'Store', 'slug');
+    BuiltValueNullFieldError.checkNotNull(isSelected, r'Store', 'isSelected');
   }
 
   @override
@@ -356,7 +370,8 @@ class _$Store extends Store {
     return other is Store &&
         id == other.id &&
         name == other.name &&
-        slug == other.slug;
+        slug == other.slug &&
+        isSelected == other.isSelected;
   }
 
   @override
@@ -365,6 +380,7 @@ class _$Store extends Store {
     _$hash = $jc(_$hash, id.hashCode);
     _$hash = $jc(_$hash, name.hashCode);
     _$hash = $jc(_$hash, slug.hashCode);
+    _$hash = $jc(_$hash, isSelected.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -374,7 +390,8 @@ class _$Store extends Store {
     return (newBuiltValueToStringHelper(r'Store')
           ..add('id', id)
           ..add('name', name)
-          ..add('slug', slug))
+          ..add('slug', slug)
+          ..add('isSelected', isSelected))
         .toString();
   }
 }
@@ -394,7 +411,13 @@ class StoreBuilder implements Builder<Store, StoreBuilder> {
   String? get slug => _$this._slug;
   set slug(String? slug) => _$this._slug = slug;
 
-  StoreBuilder();
+  bool? _isSelected;
+  bool? get isSelected => _$this._isSelected;
+  set isSelected(bool? isSelected) => _$this._isSelected = isSelected;
+
+  StoreBuilder() {
+    Store._setDefaults(this);
+  }
 
   StoreBuilder get _$this {
     final $v = _$v;
@@ -402,6 +425,7 @@ class StoreBuilder implements Builder<Store, StoreBuilder> {
       _id = $v.id;
       _name = $v.name;
       _slug = $v.slug;
+      _isSelected = $v.isSelected;
       _$v = null;
     }
     return this;
@@ -426,8 +450,9 @@ class StoreBuilder implements Builder<Store, StoreBuilder> {
         new _$Store._(
             id: BuiltValueNullFieldError.checkNotNull(id, r'Store', 'id'),
             name: BuiltValueNullFieldError.checkNotNull(name, r'Store', 'name'),
-            slug:
-                BuiltValueNullFieldError.checkNotNull(slug, r'Store', 'slug'));
+            slug: BuiltValueNullFieldError.checkNotNull(slug, r'Store', 'slug'),
+            isSelected: BuiltValueNullFieldError.checkNotNull(
+                isSelected, r'Store', 'isSelected'));
     replace(_$result);
     return _$result;
   }

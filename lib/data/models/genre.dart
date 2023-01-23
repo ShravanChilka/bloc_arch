@@ -48,5 +48,7 @@ abstract class Genre implements Built<Genre, GenreBuilder> {
   @BuiltValueField(wireName: 'image_background')
   String? get imageBackground;
 
-  bool isSelected = false;
+  bool get isSelected;
+  @BuiltValueHook(initializeBuilder: true)
+  static void _setDefaults(GenreBuilder b) => b..isSelected = false;
 }

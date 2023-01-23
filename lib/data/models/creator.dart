@@ -52,4 +52,8 @@ abstract class Creator implements Built<Creator, CreatorBuilder> {
   String? get imageBackground;
   @BuiltValueField(wireName: 'games_count')
   int? get gamesCount;
+
+  bool get isSelected;
+  @BuiltValueHook(initializeBuilder: true)
+  static void _setDefaults(CreatorBuilder b) => b..isSelected = false;
 }
