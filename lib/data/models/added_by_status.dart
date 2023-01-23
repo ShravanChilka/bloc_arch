@@ -1,32 +1,35 @@
-import 'package:flutter/foundation.dart' show immutable;
-import 'package:json_annotation/json_annotation.dart'
-    show FieldRename, JsonSerializable;
+import 'dart:convert';
+import 'serializers.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 part 'added_by_status.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.snake)
-@immutable
-class AddedByStatus {
-  final int owned;
-  final int? yet;
-  final int? beaten;
-  final int? toplay;
-  final int? dropped;
-  final int? playing;
+abstract class AddedByStatus
+    implements Built<AddedByStatus, AddedByStatusBuilder> {
+  AddedByStatus._();
 
-  const AddedByStatus({
-    required this.owned,
-    this.yet,
-    this.beaten,
-    this.toplay,
-    this.dropped,
-    this.playing,
-  });
+  factory AddedByStatus(Function(AddedByStatusBuilder b) updates) =
+      _$AddedByStatus;
 
-  factory AddedByStatus.fromJson(Map<String, dynamic> json) =>
-      _$AddedByStatusFromJson(json);
+  static Serializer<AddedByStatus> get serializer => _$addedByStatusSerializer;
 
-  @override
-  String toString() {
-    return 'AddedByStatus(yet: $yet, owned: $owned, beaten: $beaten, toplay: $toplay, dropped: $dropped, playing: $playing)';
+  static AddedByStatus? fromJson(String jsonString) {
+    return serializers.deserializeWith(
+      AddedByStatus.serializer,
+      json.decode(jsonString),
+    );
   }
+
+  @BuiltValueField(wireName: 'owned')
+  int get owned;
+  @BuiltValueField(wireName: 'yet')
+  int? get yet;
+  @BuiltValueField(wireName: 'beaten')
+  int? get beaten;
+  @BuiltValueField(wireName: 'toplay')
+  int? get toplay;
+  @BuiltValueField(wireName: 'dropped')
+  int? get dropped;
+  @BuiltValueField(wireName: 'playing')
+  int? get playing;
 }

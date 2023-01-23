@@ -8,7 +8,7 @@ import '../../../../data/models/models_export.dart';
 class GamesState extends Equatable {
   final bool isLoading;
   final Failure? failure;
-  final List<GameDetails>? games;
+  final List<Game>? games;
   final List<Genre>? genres;
   final List<Tag>? tags;
 
@@ -26,7 +26,7 @@ class GamesState extends Equatable {
   GamesState copyWith({
     bool? isLoading,
     Failure? failure,
-    List<GameDetails>? games,
+    List<Game>? games,
     List<Genre>? genres,
     List<Tag>? tags,
   }) {

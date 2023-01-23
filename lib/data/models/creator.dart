@@ -1,32 +1,55 @@
-import 'package:flutter/foundation.dart' show immutable;
-import 'package:json_annotation/json_annotation.dart'
-    show FieldRename, JsonSerializable;
+import 'dart:convert';
+
+import 'package:bloc_arch/data/models/serializers.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 part 'creator.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.snake)
-@immutable
-class Creator {
-  final int id;
-  final String name;
-  final String slug;
-  final String image;
-  final String imageBackground;
-  final int gamesCount;
+abstract class CreatorResult
+    implements Built<CreatorResult, CreatorResultBuilder> {
+  CreatorResult._();
 
-  const Creator({
-    required this.id,
-    required this.name,
-    required this.slug,
-    required this.image,
-    required this.imageBackground,
-    required this.gamesCount,
-  });
+  factory CreatorResult(Function(CreatorResultBuilder b) updates) =
+      _$CreatorResult;
 
-  factory Creator.fromJson(Map<String, dynamic> json) =>
-      _$CreatorFromJson(json);
+  static Serializer<CreatorResult> get serializer => _$creatorResultSerializer;
 
-  @override
-  String toString() {
-    return 'Creator(id: $id, name: $name, slug: $slug, image: $image, imageBackground: $imageBackground, gamesCount: $gamesCount)';
+  static CreatorResult? fromJson(String jsonString) {
+    return serializers.deserializeWith(
+      CreatorResult.serializer,
+      json.decode(jsonString),
+    );
   }
+
+  @BuiltValueField(wireName: 'results')
+  BuiltList<Creator> get creators;
+}
+
+abstract class Creator implements Built<Creator, CreatorBuilder> {
+  Creator._();
+
+  factory Creator(Function(CreatorBuilder b) updates) = _$Creator;
+
+  static Serializer<Creator> get serializer => _$creatorSerializer;
+
+  static Creator? fromJson(String jsonString) {
+    return serializers.deserializeWith(
+      Creator.serializer,
+      json.decode(jsonString),
+    );
+  }
+
+  @BuiltValueField(wireName: 'id')
+  int get id;
+  @BuiltValueField(wireName: 'name')
+  String get name;
+  @BuiltValueField(wireName: 'slug')
+  String get slug;
+  @BuiltValueField(wireName: 'image')
+  String? get image;
+  @BuiltValueField(wireName: 'image_background')
+  String? get imageBackground;
+  @BuiltValueField(wireName: 'games_count')
+  int? get gamesCount;
 }

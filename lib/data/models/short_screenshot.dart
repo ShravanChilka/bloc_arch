@@ -1,22 +1,29 @@
-import 'package:flutter/foundation.dart' show immutable;
-import 'package:json_annotation/json_annotation.dart'
-    show FieldRename, JsonSerializable;
+import 'dart:convert';
+
+import 'serializers.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 part 'short_screenshot.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.snake)
-@immutable
-class ShortScreenshot {
-  final int id;
-  final String image;
+abstract class ShortScreenshot
+    implements Built<ShortScreenshot, ShortScreenshotBuilder> {
+  ShortScreenshot._();
 
-  const ShortScreenshot({
-    required this.id,
-    required this.image,
-  });
+  factory ShortScreenshot(Function(ShortScreenshotBuilder b) updates) =
+      _$ShortScreenshot;
 
-  factory ShortScreenshot.fromJson(Map<String, dynamic> json) =>
-      _$ShortScreenshotFromJson(json);
+  static Serializer<ShortScreenshot> get serializer =>
+      _$shortScreenshotSerializer;
 
-  @override
-  String toString() => 'ShortScreenshot(id: $id, image: $image)';
+  static ShortScreenshot? fromJson(String jsonString) {
+    return serializers.deserializeWith(
+      ShortScreenshot.serializer,
+      json.decode(jsonString),
+    );
+  }
+
+  @BuiltValueField(wireName: 'id')
+  int get id;
+  @BuiltValueField(wireName: 'image')
+  String get image;
 }

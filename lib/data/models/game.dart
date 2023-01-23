@@ -1,123 +1,92 @@
-import 'package:flutter/foundation.dart' show immutable;
-import 'package:json_annotation/json_annotation.dart'
-    show FieldRename, JsonSerializable;
+import 'dart:convert';
+import 'serializers.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/serializer.dart';
+import 'rating.dart';
 import 'added_by_status.dart';
 import 'platform.dart';
-import 'short_screenshot.dart';
-import 'tag.dart';
-import 'rating.dart';
-import 'esrb_rating.dart';
-import 'store.dart';
 import 'genre.dart';
+import 'store.dart';
+import 'tag.dart';
+import 'esrb_rating.dart';
+import 'short_screenshot.dart';
 part 'game.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.snake)
-@immutable
-class Game {
-  final int id;
-  final String slug;
-  final String name;
-  final int added;
+abstract class GameResult implements Built<GameResult, GameResultBuilder> {
+  GameResult._();
 
-  const Game({
-    required this.id,
-    required this.slug,
-    required this.name,
-    required this.added,
-  });
+  factory GameResult(Function(GameResultBuilder b) updates) = _$GameResult;
 
-  factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
+  @BuiltValueField(wireName: 'results')
+  BuiltList<Game> get games;
 
-  @override
-  String toString() {
-    return 'Game(id: $id, slug: $slug, name: $name, added: $added)';
+  static GameResult? fromJson(String jsonString) {
+    return serializers.deserializeWith(
+      GameResult.serializer,
+      json.decode(jsonString),
+    );
   }
+
+  static Serializer<GameResult> get serializer => _$gameResultSerializer;
 }
 
-@JsonSerializable(fieldRename: FieldRename.snake)
-@immutable
-class GameDetails {
-  final int id;
-  final String slug;
-  final String name;
-  final int added;
-  final String? released;
-  final bool tba;
-  final String? backgroundImage;
-  final double rating;
-  final int ratingTop;
-  final List<Rating> ratings;
-  final AddedByStatus? addedByStatus;
-  final int ratingsCount;
-  final int? metacritic;
-  final int suggestionsCount;
-  final int playtime;
-  final String updated;
-  final List<PlatformResult> platforms;
-  final List<StoreResult>? stores;
-  final int reviewsCount;
-  final int reviewsTextCount;
-  final List<Tag> tags;
-  final EsrbRating? esrbRating;
-  final List<ShortScreenshot>? shortScreenshots;
-  final List<PlatformResult> parentPlatforms;
-  final List<Genre> genres;
+abstract class Game implements Built<Game, GameBuilder> {
+  Game._();
 
-  const GameDetails({
-    required this.id,
-    required this.slug,
-    required this.name,
-    required this.added,
-    this.released,
-    required this.tba,
-    this.backgroundImage,
-    required this.rating,
-    required this.ratingTop,
-    required this.ratings,
-    required this.ratingsCount,
-    this.addedByStatus,
-    this.metacritic,
-    required this.suggestionsCount,
-    required this.playtime,
-    required this.updated,
-    required this.platforms,
-    this.stores,
-    required this.reviewsCount,
-    required this.reviewsTextCount,
-    required this.tags,
-    required this.esrbRating,
-    this.shortScreenshots,
-    required this.parentPlatforms,
-    required this.genres,
-  });
+  factory Game(Function(GameBuilder b) updates) = _$Game;
 
-  factory GameDetails.fromJson(Map<String, dynamic> json) =>
-      _$GameDetailsFromJson(json);
+  static Serializer<Game> get serializer => _$gameSerializer;
 
-  static List<GameDetails> fromJsonList(List<dynamic> list) {
-    return list.map((e) => GameDetails.fromJson(e)).toList();
+  static Game? fromJson(String jsonString) {
+    return serializers.deserializeWith(
+      Game.serializer,
+      json.decode(jsonString),
+    );
   }
 
-  @override
-  String toString() {
-    return 'GameDetails(id: $id, slug: $slug, name: $name, added: $added, released: $released, tba: $tba, backgroundImage: $backgroundImage, rating: $rating, ratingTop: $ratingTop, ratings: $ratings, ratingsCount: $ratingsCount, addedByStatus: $addedByStatus, metacritic: $metacritic, suggestionsCount: $suggestionsCount, playtime: $playtime, updated: $updated, platforms: $platforms, stores: $stores, reviewsCount: $reviewsCount, reviewsTextCount: $reviewsTextCount, tags: $tags, esrbRating: $esrbRating, shortScreenshots: $shortScreenshots, parentPlatforms: $parentPlatforms, genres: $genres)';
-  }
-}
-
-@JsonSerializable(fieldRename: FieldRename.snake)
-@immutable
-class GameDetailsResult {
-  final int count;
-  final List<GameDetails> results;
-
-  const GameDetailsResult({
-    required this.count,
-    required this.results,
-  });
-
-  factory GameDetailsResult.fromJson(Map<String, dynamic> json) =>
-      _$GameDetailsResultFromJson(json);
-
-  @override
-  String toString() => 'GameDetailsResult(count: $count, results: $results)';
+  @BuiltValueField(wireName: 'id')
+  int get id;
+  @BuiltValueField(wireName: 'slug')
+  String get slug;
+  @BuiltValueField(wireName: 'name')
+  String get name;
+  @BuiltValueField(wireName: 'background_image')
+  String? get backgroundImage;
+  @BuiltValueField(wireName: 'rating')
+  double? get rating;
+  @BuiltValueField(wireName: 'rating_top')
+  int? get ratingTop;
+  @BuiltValueField(wireName: 'ratings')
+  BuiltList<Rating>? get ratings;
+  @BuiltValueField(wireName: 'ratings_count')
+  int? get ratingsCount;
+  @BuiltValueField(wireName: 'reviews_text_count')
+  int? get reviewsTextCount;
+  @BuiltValueField(wireName: 'added')
+  int? get added;
+  @BuiltValueField(wireName: 'added_by_status')
+  AddedByStatus? get addedByStatus;
+  @BuiltValueField(wireName: 'metacritic')
+  int? get metacritc;
+  @BuiltValueField(wireName: 'playtime')
+  int? get playtime;
+  @BuiltValueField(wireName: 'updated')
+  String? get updated;
+  @BuiltValueField(wireName: 'reviews_count')
+  int get reviewsCount;
+  @BuiltValueField(wireName: 'platforms')
+  BuiltList<PlatformObject>? get platforms;
+  @BuiltValueField(wireName: 'parent_platforms')
+  BuiltList<PlatformObject>? get parentPlatforms;
+  @BuiltValueField(wireName: 'genres')
+  BuiltList<Genre>? get genres;
+  @BuiltValueField(wireName: 'stores')
+  BuiltList<StoreResult>? get stores;
+  @BuiltValueField(wireName: 'tags')
+  BuiltList<Tag>? get tags;
+  @BuiltValueField(wireName: 'esrb_rating')
+  EsrbRating? get esrbRating;
+  @BuiltValueField(wireName: 'short_screenshots')
+  BuiltList<ShortScreenshot>? get shortScreenshots;
 }

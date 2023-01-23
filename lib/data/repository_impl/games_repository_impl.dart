@@ -48,7 +48,7 @@ class GamesRepositoryImpl implements GamesRepository {
   }
 
   @override
-  Future<Either<Failure, List<GameDetails>>> getAllGames({
+  Future<Either<Failure, List<Game>>> getAllGames({
     required Params params,
   }) async {
     if (await networkInfo.isConnected) {

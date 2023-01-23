@@ -1,75 +1,78 @@
-import 'package:flutter/foundation.dart' show immutable;
-import 'package:json_annotation/json_annotation.dart'
-    show FieldRename, JsonSerializable;
-import 'game.dart';
+import 'dart:convert';
+import 'package:built_collection/built_collection.dart';
+import 'serializers.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 part 'platform.g.dart';
 
-@immutable
-@JsonSerializable(fieldRename: FieldRename.snake)
-class Platform {
-  final int id;
-  final String name;
-  final String slug;
+abstract class PlatformResult
+    implements Built<PlatformResult, PlatformResultBuilder> {
+  PlatformResult._();
 
-  const Platform({
-    required this.id,
-    required this.name,
-    required this.slug,
-  });
+  factory PlatformResult(Function(PlatformResultBuilder b) updates) =
+      _$PlatformResult;
 
-  factory Platform.fromJson(Map<String, dynamic> json) =>
-      _$PlatformFromJson(json);
+  static Serializer<PlatformResult> get serializer =>
+      _$platformResultSerializer;
 
-  @override
-  String toString() => 'Platform(id: $id, name: $name, slug: $slug)';
-}
-
-@immutable
-@JsonSerializable(fieldRename: FieldRename.snake)
-class PlatformResult {
-  final Platform platform;
-
-  const PlatformResult({
-    required this.platform,
-  });
-
-  factory PlatformResult.fromJson(Map<String, dynamic> json) =>
-      _$PlatformResultFromJson(json);
-
-  @override
-  String toString() => 'PlatformResult(platform: $platform)';
-}
-
-@immutable
-@JsonSerializable(fieldRename: FieldRename.snake)
-class PlatformDetails {
-  final int id;
-  final String name;
-  final String slug;
-  final int gamesCount;
-  final String imageBackground;
-  final List<Game>? games;
-  final String? image;
-  final int? yearStart;
-  final int? yearEnd;
-
-  const PlatformDetails({
-    required this.id,
-    required this.name,
-    required this.slug,
-    required this.gamesCount,
-    required this.imageBackground,
-    this.games,
-    this.image,
-    this.yearStart,
-    this.yearEnd,
-  });
-
-  factory PlatformDetails.fromJson(Map<String, dynamic> json) =>
-      _$PlatformDetailsFromJson(json);
-
-  @override
-  String toString() {
-    return 'PlatformDetails(id: $id, name: $name, slug: $slug, gamesCount: $gamesCount, imageBackground: $imageBackground, games: $games, image: $image, yearStart: $yearStart, yearEnd: $yearEnd)';
+  static PlatformResult? fromJson(String jsonString) {
+    return serializers.deserializeWith(
+      PlatformResult.serializer,
+      json.decode(jsonString),
+    );
   }
+
+  @BuiltValueField(wireName: 'results')
+  BuiltList<Platform> get platforms;
+}
+
+abstract class PlatformObject
+    implements Built<PlatformObject, PlatformObjectBuilder> {
+  PlatformObject._();
+
+  factory PlatformObject(Function(PlatformObjectBuilder b) updates) =
+      _$PlatformObject;
+
+  static Serializer<PlatformObject> get serializer =>
+      _$platformObjectSerializer;
+
+  static PlatformObject? fromJson(String jsonString) {
+    return serializers.deserializeWith(
+      PlatformObject.serializer,
+      json.decode(jsonString),
+    );
+  }
+
+  @BuiltValueField(wireName: 'platform')
+  Platform get platform;
+}
+
+abstract class Platform implements Built<Platform, PlatformBuilder> {
+  Platform._();
+
+  factory Platform(Function(PlatformBuilder b) updates) = _$Platform;
+
+  static Serializer<Platform> get serializer => _$platformSerializer;
+
+  static Platform? fromJson(String jsonString) {
+    return serializers.deserializeWith(
+      Platform.serializer,
+      json.decode(jsonString),
+    );
+  }
+
+  @BuiltValueField(wireName: 'id')
+  int get id;
+  @BuiltValueField(wireName: 'name')
+  String get name;
+  @BuiltValueField(wireName: 'slug')
+  String get slug;
+  @BuiltValueField(wireName: 'games_count')
+  int? get gamesCount;
+  @BuiltValueField(wireName: 'image_background')
+  String? get imageBackground;
+  @BuiltValueField(wireName: 'year_start')
+  int? get yearStart;
+  @BuiltValueField(wireName: 'year_end')
+  int? get yearEnd;
 }

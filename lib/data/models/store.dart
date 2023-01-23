@@ -1,69 +1,66 @@
-import 'package:flutter/foundation.dart' show immutable;
-import 'package:json_annotation/json_annotation.dart'
-    show FieldRename, JsonSerializable;
+import 'dart:convert';
+
+import 'package:built_collection/built_collection.dart';
+
+import 'serializers.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 part 'store.g.dart';
 
-@immutable
-@JsonSerializable(fieldRename: FieldRename.snake)
-class Store {
-  final int id;
-  final String name;
-  final String slug;
+abstract class StoreResult implements Built<StoreResult, StoreResultBuilder> {
+  StoreResult._();
 
-  const Store({
-    required this.id,
-    required this.name,
-    required this.slug,
-  });
+  factory StoreResult(Function(StoreResultBuilder b) updates) = _$StoreResult;
 
-  factory Store.fromJson(Map<String, dynamic> json) => _$StoreFromJson(json);
+  static Serializer<StoreResult> get serializer => _$storeResultSerializer;
 
-  @override
-  String toString() => 'Store(id: $id, name: $name, slug: $slug)';
-}
-
-@immutable
-@JsonSerializable(fieldRename: FieldRename.snake)
-class StoreResult {
-  final Store store;
-
-  const StoreResult({
-    required this.store,
-  });
-
-  factory StoreResult.fromJson(Map<String, dynamic> json) =>
-      _$StoreResultFromJson(json);
-
-  @override
-  String toString() => 'StoreResult(store: $store)';
-}
-
-@immutable
-@JsonSerializable(fieldRename: FieldRename.snake)
-class StoreDetails {
-  final int id;
-  final String name;
-  final String slug;
-  final String? domain;
-  final int gamesCount;
-  final String imageBackground;
-  final String description;
-
-  const StoreDetails({
-    required this.id,
-    required this.name,
-    required this.slug,
-    this.domain,
-    required this.gamesCount,
-    required this.imageBackground,
-    required this.description,
-  });
-
-  factory StoreDetails.fromJson(Map<String, dynamic> json) =>
-      _$StoreDetailsFromJson(json);
-
-  @override
-  String toString() {
-    return 'StoreDetails(id: $id, name: $name, slug: $slug, domain: $domain, gamesCount: $gamesCount, imageBackground: $imageBackground, description: $description)';
+  static StoreResult? fromJson(String jsonString) {
+    return serializers.deserializeWith(
+      StoreResult.serializer,
+      json.decode(jsonString),
+    );
   }
+
+  @BuiltValueField(wireName: 'results')
+  BuiltList<Store> get stores;
+}
+
+abstract class StoreObject implements Built<StoreObject, StoreObjectBuilder> {
+  StoreObject._();
+
+  factory StoreObject(Function(StoreObjectBuilder b) updates) = _$StoreObject;
+
+  static Serializer<StoreObject> get serializer => _$storeObjectSerializer;
+
+  static StoreObject? fromJson(String jsonString) {
+    return serializers.deserializeWith(
+      StoreObject.serializer,
+      json.decode(jsonString),
+    );
+  }
+
+  @BuiltValueField(wireName: 'store')
+  Store get store;
+}
+
+abstract class Store implements Built<Store, StoreBuilder> {
+  Store._();
+
+  factory Store(Function(StoreBuilder b) updates) = _$Store;
+
+  static Store? fromJson(String jsonString) {
+    return serializers.deserializeWith(
+      Store.serializer,
+      json.decode(jsonString),
+    );
+  }
+
+  static Serializer<Store> get serializer => _$storeSerializer;
+
+  @BuiltValueField(wireName: 'id')
+  int get id;
+  @BuiltValueField(wireName: 'name')
+  String get name;
+  @BuiltValueField(wireName: 'slug')
+  String get slug;
 }

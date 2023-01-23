@@ -1,31 +1,51 @@
-import 'package:flutter/foundation.dart' show immutable;
-import 'package:json_annotation/json_annotation.dart'
-    show FieldRename, JsonSerializable;
+import 'dart:convert';
+import 'package:built_collection/built_collection.dart';
+
+import 'serializers.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 part 'tag.g.dart';
 
-@immutable
-@JsonSerializable(fieldRename: FieldRename.snake)
-class Tag {
-  final int id;
-  final String name;
-  final String slug;
-  final int gamesCount;
-  final String language;
-  final String? imageBackground;
+abstract class TagResult implements Built<TagResult, TagResultBuilder> {
+  TagResult._();
 
-  const Tag({
-    required this.id,
-    required this.name,
-    required this.slug,
-    required this.gamesCount,
-    required this.language,
-    this.imageBackground,
-  });
+  factory TagResult(Function(TagResultBuilder b) updates) = _$TagResult;
 
-  factory Tag.fromJson(Map<String, dynamic> json) => _$TagFromJson(json);
+  static Serializer<TagResult> get serializer => _$tagResultSerializer;
 
-  @override
-  String toString() {
-    return 'Tag(id: $id, name: $name, slug: $slug, gamesCount: $gamesCount, imageBackground: $imageBackground, language: $language)';
+  static TagResult? fromJson(String jsonString) {
+    return serializers.deserializeWith(
+      TagResult.serializer,
+      json.decode(jsonString),
+    );
   }
+
+  @BuiltValueField(wireName: 'results')
+  BuiltList<Tag> get tags;
+}
+
+abstract class Tag implements Built<Tag, TagBuilder> {
+  Tag._();
+
+  factory Tag(Function(TagBuilder b) updates) = _$Tag;
+
+  static Serializer<Tag> get serializer => _$tagSerializer;
+
+  static Tag? fromJson(String jsonString) {
+    return serializers.deserializeWith(
+      Tag.serializer,
+      json.decode(jsonString),
+    );
+  }
+
+  @BuiltValueField(wireName: 'id')
+  int get id;
+  @BuiltValueField(wireName: 'name')
+  String get name;
+  @BuiltValueField(wireName: 'slug')
+  String get slug;
+  @BuiltValueField(wireName: 'games_count')
+  int? get gamesCount;
+  @BuiltValueField(wireName: 'image_background')
+  String? get imageBackground;
 }

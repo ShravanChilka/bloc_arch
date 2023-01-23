@@ -16,7 +16,7 @@ import 'package:dartz/dartz.dart' show Either;
 abstract class GamesRepository {
   const GamesRepository();
 
-  Future<Either<Failure, List<GameDetails>>> getAllGames({
+  Future<Either<Failure, List<Game>>> getAllGames({
     required Params params,
   });
   Future<Either<Failure, List<Genre>>> getAllGenres({

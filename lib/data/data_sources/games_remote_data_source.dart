@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'package:bloc_arch/core/errors/exceptions.dart';
 import 'package:bloc_arch/core/usecases/usecase.dart';
@@ -6,7 +5,7 @@ import 'package:http/http.dart' as http show Client;
 import '../../data/models/models_export.dart';
 
 abstract class GamesRemoteDataSource {
-  Future<List<GameDetails>> getAllGames({
+  Future<List<Game>> getAllGames({
     required Params params,
   });
   Future<List<Genre>> getAllGenres({required Params params});
@@ -28,7 +27,7 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
   });
 
   Uri _getUri({required String path, required Map<String, String> params}) {
-    return Uri.http(
+    return Uri.https(
       baseUrl,
       path,
       params,
@@ -38,22 +37,22 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
   @override
   Future<List<Creator>> getAllCreators({required Params params}) async {
     try {
-      final response = await client
-          .get(_getUri(path: 'api/creators', params: params.queryParameter));
-      if (response.statusCode == 200) {
-        if (response.body.isNotEmpty) {
-          final List<Creator> creators =
-              (jsonDecode(response.body)['results'] as List<dynamic>)
-                  .map((e) => Creator.fromJson(e))
-                  .toList();
-          log('creators_length : ${creators.length}');
-          return creators;
-        } else {
-          throw const ServerException(exception: 'Empty Response');
+      final response = await client.get(
+        _getUri(
+          path: 'api/creators',
+          params: params.queryParameter,
+        ),
+      );
+      if (response.statusCode == 200 && response.body.isNotEmpty) {
+        final CreatorResult? result = CreatorResult.fromJson(response.body);
+        if (result != null) {
+          return result.creators.toList();
         }
+        throw ServerException(
+            exception: '${response.statusCode} : Something went wrong');
       } else {
         throw ServerException(
-            exception: '${response.statusCode} : invalid status code');
+            exception: '${response.statusCode} : Something went wrong');
       }
     } on ServerException catch (e) {
       throw ServerException(exception: e.toString());
@@ -63,22 +62,22 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
   @override
   Future<List<Developer>> getAllDevelopers({required Params params}) async {
     try {
-      final response = await client
-          .get(_getUri(path: 'api/developers', params: params.queryParameter));
-      if (response.statusCode == 200) {
-        if (response.body.isNotEmpty) {
-          final List<Developer> developers =
-              (jsonDecode(response.body)['results'] as List<dynamic>)
-                  .map((e) => Developer.fromJson(e))
-                  .toList();
-          log('developers_length : ${developers.length}');
-          return developers;
-        } else {
-          throw const ServerException(exception: 'Empty Response');
+      final response = await client.get(
+        _getUri(
+          path: 'api/developers',
+          params: params.queryParameter,
+        ),
+      );
+      if (response.statusCode == 200 && response.body.isNotEmpty) {
+        final DeveloperResult? result = DeveloperResult.fromJson(response.body);
+        if (result != null) {
+          return result.developers.toList();
         }
+        throw ServerException(
+            exception: '${response.statusCode} : Something went wrong');
       } else {
         throw ServerException(
-            exception: '${response.statusCode} : invalid status code');
+            exception: '${response.statusCode} : Something went wrong');
       }
     } on ServerException catch (e) {
       throw ServerException(exception: e.toString());
@@ -86,27 +85,23 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
   }
 
   @override
-  Future<List<GameDetails>> getAllGames({
+  Future<List<Game>> getAllGames({
     required Params params,
   }) async {
     try {
       final response = await client
           .get(_getUri(path: 'api/games', params: params.queryParameter));
-      if (response.statusCode == 200) {
-        if (response.body.isNotEmpty) {
-          final List<GameDetails> games =
-              (jsonDecode(response.body)['results'] as List<dynamic>?)
-                      ?.map((e) => GameDetails.fromJson(e))
-                      .toList() ??
-                  [];
-          log('games_length : ${games.length}');
-          return games;
-        } else {
-          throw const ServerException(exception: 'Empty Response');
+      if (response.statusCode == 200 && response.body.isNotEmpty) {
+        final GameResult? result = GameResult.fromJson(response.body);
+        if (result != null) {
+          log('games_length : ${result.games.toList().length}');
+          return result.games.toList();
         }
+        throw ServerException(
+            exception: '${response.statusCode} : Something went wrong');
       } else {
         throw ServerException(
-            exception: '${response.statusCode} : invalid status code');
+            exception: '${response.statusCode} : Something went wrong');
       }
     } on ServerException catch (e) {
       throw ServerException(exception: e.toString());
@@ -118,20 +113,17 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
     try {
       final response = await client
           .get(_getUri(path: 'api/genres', params: params.queryParameter));
-      if (response.statusCode == 200) {
-        if (response.body.isNotEmpty) {
-          final List<Genre> genres =
-              (jsonDecode(response.body)['results'] as List<dynamic>)
-                  .map((e) => Genre.fromJson(e))
-                  .toList();
-          log('genres_length : ${genres.length}');
-          return genres;
-        } else {
-          throw const ServerException(exception: 'Empty Response');
+      if (response.statusCode == 200 && response.body.isNotEmpty) {
+        final GenreResult? result = GenreResult.fromJson(response.body);
+        if (result != null) {
+          log('genres_length : ${result.genres.toList().length}');
+          return result.genres.toList();
         }
+        throw ServerException(
+            exception: '${response.statusCode} : Something went wrong');
       } else {
         throw ServerException(
-            exception: '${response.statusCode} : Invalid status code');
+            exception: '${response.statusCode} : Something went wrong');
       }
     } on ServerException catch (e) {
       throw ServerException(exception: e.toString());
@@ -141,22 +133,19 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
   @override
   Future<List<Platform>> getAllParentPlatforms({required Params params}) async {
     try {
-      final response = await client
-          .get(_getUri(path: 'api/platforms', params: params.queryParameter));
-      if (response.statusCode == 200) {
-        if (response.body.isNotEmpty) {
-          final List<Platform> parentPlatforms =
-              (jsonDecode(response.body)['results'] as List<dynamic>)
-                  .map((e) => Platform.fromJson(e))
-                  .toList();
-          log('parent_platforms_length : ${parentPlatforms.length}');
-          return parentPlatforms;
-        } else {
-          throw const ServerException(exception: 'Empty Response');
+      final response = await client.get(_getUri(
+          path: 'api/platforms/lists/parents', params: params.queryParameter));
+      if (response.statusCode == 200 && response.body.isNotEmpty) {
+        final PlatformResult? result = PlatformResult.fromJson(response.body);
+        if (result != null) {
+          log('parent_platforms_length : ${result.platforms.toList().length}');
+          return result.platforms.toList();
         }
+        throw ServerException(
+            exception: '${response.statusCode} : Something went wrong');
       } else {
         throw ServerException(
-            exception: '${response.statusCode} : invalid status code');
+            exception: '${response.statusCode} : Something went wrong');
       }
     } on ServerException catch (e) {
       throw ServerException(exception: e.toString());
@@ -168,20 +157,17 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
     try {
       final response = await client
           .get(_getUri(path: 'api/platforms', params: params.queryParameter));
-      if (response.statusCode == 200) {
-        if (response.body.isNotEmpty) {
-          final List<Platform> platforms =
-              (jsonDecode(response.body)['results'] as List<dynamic>)
-                  .map((e) => Platform.fromJson(e))
-                  .toList();
-          log('platforms_length : ${platforms.length}');
-          return platforms;
-        } else {
-          throw const ServerException(exception: 'Empty Response');
+      if (response.statusCode == 200 && response.body.isNotEmpty) {
+        final PlatformResult? result = PlatformResult.fromJson(response.body);
+        if (result != null) {
+          log('platforms_length : ${result.platforms.toList().length}');
+          return result.platforms.toList();
         }
+        throw ServerException(
+            exception: '${response.statusCode} : Something went wrong');
       } else {
         throw ServerException(
-            exception: '${response.statusCode} : invalid status code');
+            exception: '${response.statusCode} : Something went wrong');
       }
     } on ServerException catch (e) {
       throw ServerException(exception: e.toString());
@@ -193,20 +179,17 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
     try {
       final response = await client
           .get(_getUri(path: 'api/publishers', params: params.queryParameter));
-      if (response.statusCode == 200) {
-        if (response.body.isNotEmpty) {
-          final List<Publisher> publishers =
-              (jsonDecode(response.body)['results'] as List<dynamic>)
-                  .map((e) => Publisher.fromJson(e))
-                  .toList();
-          log('publishers_length : ${publishers.length}');
-          return publishers;
-        } else {
-          throw const ServerException(exception: 'Empty Response');
+      if (response.statusCode == 200 && response.body.isNotEmpty) {
+        final PublisherResult? result = PublisherResult.fromJson(response.body);
+        if (result != null) {
+          log('publishers_length : ${result.publishers.toList().length}');
+          return result.publishers.toList();
         }
+        throw ServerException(
+            exception: '${response.statusCode} : Something went wrong');
       } else {
         throw ServerException(
-            exception: '${response.statusCode} : invalid status code');
+            exception: '${response.statusCode} : Something went wrong');
       }
     } on ServerException catch (e) {
       throw ServerException(exception: e.toString());
@@ -218,20 +201,17 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
     try {
       final response = await client
           .get(_getUri(path: 'api/stores', params: params.queryParameter));
-      if (response.statusCode == 200) {
-        if (response.body.isNotEmpty) {
-          final List<Store> stores =
-              (jsonDecode(response.body)['results'] as List<dynamic>)
-                  .map((e) => Store.fromJson(e))
-                  .toList();
-          log('stores_length : ${stores.length}');
-          return stores;
-        } else {
-          throw const ServerException(exception: 'Empty Response');
+      if (response.statusCode == 200 && response.body.isNotEmpty) {
+        final StoreResult? result = StoreResult.fromJson(response.body);
+        if (result != null) {
+          log('stores_length : ${result.stores.toList().length}');
+          return result.stores.toList();
         }
+        throw ServerException(
+            exception: '${response.statusCode} : Something went wrong');
       } else {
         throw ServerException(
-            exception: '${response.statusCode} : invalid status code');
+            exception: '${response.statusCode} : Something went wrong');
       }
     } on ServerException catch (e) {
       throw ServerException(exception: e.toString());
@@ -243,20 +223,17 @@ class GamesRemoteDataSourceImpl implements GamesRemoteDataSource {
     try {
       final response = await client
           .get(_getUri(path: 'api/tags', params: params.queryParameter));
-      if (response.statusCode == 200) {
-        if (response.body.isNotEmpty) {
-          final List<Tag> tags =
-              (jsonDecode(response.body)['results'] as List<dynamic>)
-                  .map((e) => Tag.fromJson(e))
-                  .toList();
-          log('tags_length : ${tags.length}');
-          return tags;
-        } else {
-          throw const ServerException(exception: 'Empty Response');
+      if (response.statusCode == 200 && response.body.isNotEmpty) {
+        final TagResult? result = TagResult.fromJson(response.body);
+        if (result != null) {
+          log('tags_length : ${result.tags.toList().length}');
+          return result.tags.toList();
         }
+        throw ServerException(
+            exception: '${response.statusCode} : Something went wrong');
       } else {
         throw ServerException(
-            exception: '${response.statusCode} : invalid status code');
+            exception: '${response.statusCode} : Something went wrong');
       }
     } on ServerException catch (e) {
       throw ServerException(exception: e.toString());

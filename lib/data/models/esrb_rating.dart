@@ -1,30 +1,28 @@
-import 'package:flutter/foundation.dart' show immutable;
-import 'package:json_annotation/json_annotation.dart'
-    show FieldRename, JsonSerializable;
+import 'dart:convert';
+
+import 'serializers.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 part 'esrb_rating.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.snake)
-@immutable
-class EsrbRating {
-  final int id;
-  final String name;
-  final String slug;
-  final String? nameEn;
-  final String? nameRu;
+abstract class EsrbRating implements Built<EsrbRating, EsrbRatingBuilder> {
+  EsrbRating._();
 
-  const EsrbRating({
-    required this.id,
-    required this.name,
-    required this.slug,
-    this.nameEn,
-    this.nameRu,
-  });
+  factory EsrbRating(Function(EsrbRatingBuilder b) updates) = _$EsrbRating;
 
-  factory EsrbRating.fromJson(Map<String, dynamic> json) =>
-      _$EsrbRatingFromJson(json);
+  static Serializer<EsrbRating> get serializer => _$esrbRatingSerializer;
 
-  @override
-  String toString() {
-    return 'EsrbRating(id: $id, name: $name, slug: $slug, nameEn: $nameEn, nameRu: $nameRu)';
+  static EsrbRating? fromJson(String jsonString) {
+    return serializers.deserializeWith(
+      EsrbRating.serializer,
+      json.decode(jsonString),
+    );
   }
+
+  @BuiltValueField(wireName: 'id')
+  int get id;
+  @BuiltValueField(wireName: 'name')
+  String get name;
+  @BuiltValueField(wireName: 'slug')
+  String get slug;
 }

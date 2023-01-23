@@ -1,30 +1,32 @@
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/serializer.dart';
-import 'game.dart';
-import 'added_by_status.dart';
-import 'esrb_rating.dart';
-import 'genre.dart';
-import 'platform.dart';
-import 'rating.dart';
-import 'short_screenshot.dart';
-import 'store.dart';
-import 'tag.dart';
+import 'models_export.dart';
 part 'serializers.g.dart';
 
 @SerializersFor([
-  GameResult,
   Game,
+  GameResult,
   AddedByStatus,
   EsrbRating,
   Genre,
-  PlatformResult,
+  GenreResult,
   Platform,
+  PlatformObject,
+  PlatformResult,
   Rating,
   ShortScreenshot,
-  StoreResult,
   Store,
+  StoreObject,
+  StoreResult,
+  Developer,
+  DeveloperResult,
+  Creator,
+  CreatorResult,
+  Publisher,
+  PublisherResult,
   Tag,
+  TagResult,
 ])
 final Serializers serializers =
     (_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();

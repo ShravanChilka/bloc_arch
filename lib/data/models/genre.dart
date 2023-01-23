@@ -1,45 +1,52 @@
-import 'package:flutter/foundation.dart' show immutable;
-import 'package:json_annotation/json_annotation.dart'
-    show FieldRename, JsonSerializable;
+import 'dart:convert';
+import 'package:built_collection/built_collection.dart';
+import 'serializers.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 part 'genre.g.dart';
 
-@immutable
-@JsonSerializable(fieldRename: FieldRename.snake)
-class Genre {
-  final int id;
-  final String name;
-  final String slug;
-  final int? gamesCount;
-  final String? imageBackground;
+abstract class GenreResult implements Built<GenreResult, GenreResultBuilder> {
+  GenreResult._();
 
-  const Genre({
-    required this.id,
-    required this.name,
-    required this.slug,
-    this.gamesCount,
-    this.imageBackground,
-  });
+  factory GenreResult(Function(GenreResultBuilder b) updates) = _$GenreResult;
 
-  factory Genre.fromJson(Map<String, dynamic> json) => _$GenreFromJson(json);
+  static Serializer<GenreResult> get serializer => _$genreResultSerializer;
 
-  @override
-  String toString() {
-    return 'Genre(id: $id, name: $name, slug: $slug, gamesCount: $gamesCount, imageBackground: $imageBackground)';
+  static GenreResult? fromJson(String jsonString) {
+    return serializers.deserializeWith(
+      GenreResult.serializer,
+      json.decode(jsonString),
+    );
   }
+
+  @BuiltValueField(wireName: 'results')
+  BuiltList<Genre> get genres;
 }
 
-@immutable
-@JsonSerializable(fieldRename: FieldRename.snake)
-class GenreResult {
-  final List<Genre> results;
+abstract class Genre implements Built<Genre, GenreBuilder> {
+  Genre._();
 
-  const GenreResult({
-    required this.results,
-  });
+  factory Genre(Function(GenreBuilder b) updates) = _$Genre;
 
-  factory GenreResult.fromJson(Map<String, dynamic> json) =>
-      _$GenreResultFromJson(json);
+  static Serializer<Genre> get serializer => _$genreSerializer;
 
-  @override
-  String toString() => 'GenreResult(results: $results)';
+  static Genre? fromJson(String jsonString) {
+    return serializers.deserializeWith(
+      Genre.serializer,
+      json.decode(jsonString),
+    );
+  }
+
+  @BuiltValueField(wireName: 'id')
+  int get id;
+  @BuiltValueField(wireName: 'name')
+  String get name;
+  @BuiltValueField(wireName: 'slug')
+  String get slug;
+  @BuiltValueField(wireName: 'games_count')
+  int? get gamesCount;
+  @BuiltValueField(wireName: 'image_background')
+  String? get imageBackground;
+
+  bool isSelected = false;
 }

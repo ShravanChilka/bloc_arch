@@ -1,27 +1,29 @@
-import 'package:flutter/foundation.dart' show immutable;
-import 'package:json_annotation/json_annotation.dart'
-    show FieldRename, JsonSerializable;
+import 'dart:convert';
+
+import 'serializers.dart';
+import 'package:built_value/built_value.dart';
+import 'package:built_value/serializer.dart';
 part 'rating.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.snake)
-@immutable
-class Rating {
-  final int id;
-  final String title;
-  final int count;
-  final double percent;
+abstract class Rating implements Built<Rating, RatingBuilder> {
+  Rating._();
+  factory Rating(Function(RatingBuilder b) updates) = _$Rating;
 
-  const Rating({
-    required this.id,
-    required this.title,
-    required this.count,
-    required this.percent,
-  });
+  static Serializer<Rating> get serializer => _$ratingSerializer;
 
-  factory Rating.fromJson(Map<String, dynamic> json) => _$RatingFromJson(json);
-
-  @override
-  String toString() {
-    return 'Rating(id: $id, title: $title, count: $count, percent: $percent)';
+  static Rating? fromJson(String jsonString) {
+    return serializers.deserializeWith(
+      Rating.serializer,
+      json.decode(jsonString),
+    );
   }
+
+  @BuiltValueField(wireName: 'id')
+  int get id;
+  @BuiltValueField(wireName: 'title')
+  String get title;
+  @BuiltValueField(wireName: 'count')
+  int get count;
+  @BuiltValueField(wireName: 'percent')
+  double get percent;
 }
