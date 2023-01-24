@@ -25,3 +25,8 @@ class GenresEventUnselected extends GenresEvent {
     required this.index,
   });
 }
+
+@immutable
+class GenresEventUnselectAll extends GenresEvent {
+  const GenresEventUnselectAll();
+}

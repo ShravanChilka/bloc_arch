@@ -21,6 +21,7 @@ class GenresBloc extends Bloc<GenresEvent, GenresState> {
     on<GenresEventGetAll>(_getAllGenresEvent);
     on<GenresEventSelected>(_genreSelectedEvent);
     on<GenresEventUnselected>(_genreUnselectedEvent);
+    on<GenresEventUnselectAll>(_genreUnselectAll);
   }
 
   FutureOr<void> _getAllGenresEvent(
@@ -60,4 +61,7 @@ class GenresBloc extends Bloc<GenresEvent, GenresState> {
         genres[index].rebuild((builder) => builder..isSelected = false);
     emit(state.copyWith(genres: genres));
   }
+
+  FutureOr<void> _genreUnselectAll(
+      GenresEventUnselectAll event, Emitter<GenresState> emit) {}
 }
