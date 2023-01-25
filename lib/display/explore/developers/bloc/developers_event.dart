@@ -9,3 +9,24 @@ abstract class DevelopersEvent {
 class DevelopersEventGetAll extends DevelopersEvent {
   const DevelopersEventGetAll();
 }
+
+@immutable
+class DevelopersEventSelected extends DevelopersEvent {
+  final int index;
+  const DevelopersEventSelected({
+    required this.index,
+  });
+}
+
+@immutable
+class DevelopersEventUnselected extends DevelopersEvent {
+  final int index;
+  const DevelopersEventUnselected({
+    required this.index,
+  });
+}
+
+@immutable
+class DevelopersEventUnselectAll extends DevelopersEvent {
+  const DevelopersEventUnselectAll();
+}

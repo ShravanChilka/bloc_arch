@@ -1,10 +1,9 @@
 import 'package:flutter/foundation.dart' show immutable;
-import 'package:equatable/equatable.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../data/models/models_export.dart';
 
 @immutable
-class PublishersState extends Equatable {
+class PublishersState {
   final bool isLoading;
   final Failure? failure;
   final List<Publisher>? publishers;
@@ -14,9 +13,6 @@ class PublishersState extends Equatable {
     required this.failure,
     required this.publishers,
   });
-
-  @override
-  List<Object?> get props => [isLoading, failure, publishers];
 
   PublishersState copyWith({
     bool? isLoading,

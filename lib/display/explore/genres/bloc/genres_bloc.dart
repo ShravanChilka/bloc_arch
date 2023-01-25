@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:bloc_arch/core/usecases/usecase.dart';
 import 'package:bloc_arch/domain/repository/games_repository.dart';
 import 'package:bloc_arch/domain/usecases/get_all_genres.dart';
@@ -28,7 +27,6 @@ class GenresBloc extends Bloc<GenresEvent, GenresState> {
     GenresEventGetAll event,
     Emitter<GenresState> emit,
   ) async {
-    //* get all genres event
     emit(state.copyWith(isLoading: true));
     final result = await GetAllGenres(repository).call(Params());
     result.fold((failure) {
@@ -42,7 +40,6 @@ class GenresBloc extends Bloc<GenresEvent, GenresState> {
     GenresEventSelected event,
     Emitter<GenresState> emit,
   ) {
-    //emit(state.copyWith(isLoading: true));
     List<Genre> genres = state.genres!;
     final int index = event.index;
     genres[index] =
@@ -54,7 +51,6 @@ class GenresBloc extends Bloc<GenresEvent, GenresState> {
     GenresEventUnselected event,
     Emitter<GenresState> emit,
   ) {
-    //emit(state.copyWith(isLoading: true));
     List<Genre> genres = state.genres!;
     final int index = event.index;
     genres[index] =
@@ -63,5 +59,12 @@ class GenresBloc extends Bloc<GenresEvent, GenresState> {
   }
 
   FutureOr<void> _genreUnselectAll(
-      GenresEventUnselectAll event, Emitter<GenresState> emit) {}
+    GenresEventUnselectAll event,
+    Emitter<GenresState> emit,
+  ) {
+    final genres = state.genres
+        ?.map((e) => e.rebuild((b) => b..isSelected = false))
+        .toList();
+    emit(state.copyWith(genres: genres));
+  }
 }

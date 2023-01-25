@@ -1,10 +1,9 @@
 import 'package:flutter/foundation.dart' show immutable;
-import 'package:equatable/equatable.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../data/models/models_export.dart';
 
 @immutable
-class TagsState extends Equatable {
+class TagsState {
   final bool isLoading;
   final Failure? failure;
   final List<Tag>? tags;
@@ -14,9 +13,6 @@ class TagsState extends Equatable {
     required this.failure,
     required this.tags,
   });
-
-  @override
-  List<Object?> get props => [isLoading, failure, tags];
 
   TagsState copyWith({
     bool? isLoading,
