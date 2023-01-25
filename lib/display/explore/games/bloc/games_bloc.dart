@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:bloc_arch/core/usecases/usecase.dart';
-import 'package:bloc_arch/data/models/creator.dart';
-import 'package:bloc_arch/data/models/genre.dart';
 import 'package:bloc_arch/data/models/models_export.dart';
 import 'package:bloc_arch/domain/repository/games_repository.dart';
 import 'package:bloc_arch/domain/usecases/get_all_games.dart';
@@ -173,8 +171,8 @@ Map<String, String>? getParamters(Type type, List<dynamic>? list) {
         final parameters = selected
             .map((e) => e.id)
             .toString()
-            .replaceAll('[', '')
-            .replaceAll(']', '');
+            .replaceAll('(', '')
+            .replaceAll(')', '');
         return {'creators': parameters};
       }
       return null;
@@ -189,8 +187,8 @@ Map<String, String>? getParamters(Type type, List<dynamic>? list) {
         final parameters = selected
             .map((e) => e.id)
             .toString()
-            .replaceAll('[', '')
-            .replaceAll(']', '');
+            .replaceAll('(', '')
+            .replaceAll(')', '');
         return {'publishers': parameters};
       }
       return null;
@@ -205,8 +203,8 @@ Map<String, String>? getParamters(Type type, List<dynamic>? list) {
         final parameters = selected
             .map((e) => e.id)
             .toString()
-            .replaceAll('[', '')
-            .replaceAll(']', '');
+            .replaceAll('(', '')
+            .replaceAll(')', '');
         return {'developers': parameters};
       }
       return null;
@@ -221,8 +219,8 @@ Map<String, String>? getParamters(Type type, List<dynamic>? list) {
         final parameters = selected
             .map((e) => e.id)
             .toString()
-            .replaceAll('[', '')
-            .replaceAll(']', '');
+            .replaceAll('(', '')
+            .replaceAll(')', '');
         return {'platforms': parameters};
       }
       return null;
@@ -237,8 +235,8 @@ Map<String, String>? getParamters(Type type, List<dynamic>? list) {
         final parameters = selected
             .map((e) => e.id)
             .toString()
-            .replaceAll('[', '')
-            .replaceAll(']', '');
+            .replaceAll('(', '')
+            .replaceAll(')', '');
         return {'parent_platforms': parameters};
       }
       return null;
@@ -253,8 +251,8 @@ Map<String, String>? getParamters(Type type, List<dynamic>? list) {
         final parameters = selected
             .map((e) => e.id)
             .toString()
-            .replaceAll('[', '')
-            .replaceAll(']', '');
+            .replaceAll('(', '')
+            .replaceAll(')', '');
         return {'stores': parameters};
       }
       return null;
@@ -269,8 +267,8 @@ Map<String, String>? getParamters(Type type, List<dynamic>? list) {
         final parameters = selected
             .map((e) => e.id)
             .toString()
-            .replaceAll('[', '')
-            .replaceAll(']', '');
+            .replaceAll('(', '')
+            .replaceAll(')', '');
         return {'tags': parameters};
       }
       return null;

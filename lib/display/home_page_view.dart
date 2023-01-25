@@ -28,7 +28,7 @@ class _HomePageViewState extends State<HomePageView> {
         destinations: const [
           NavigationDestination(
             icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
-            label: 'Search',
+            label: 'Explore',
           ),
           NavigationDestination(
             icon: FaIcon(FontAwesomeIcons.heart),
